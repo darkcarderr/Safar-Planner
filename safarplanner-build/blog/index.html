@@ -1,0 +1,1443 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Blog · Safar Planner — Travel Guides, Itineraries & Budget Tips</title>
+<meta name="description" content="Travel guides, budget itineraries, packing tips and destination deep-dives to help you plan smarter trips across India.">
+<link rel="canonical" href="index.html">
+<meta property="og:title" content="Safar Planner Blog — Travel Guides & Itineraries">
+<meta property="og:description" content="In-depth guides, honest budget breakdowns, and destination stories for every kind of Indian traveller.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   SAFAR PLANNER — BLOG INDEX PAGE
+   ========================================================= */
+
+:root {
+  color-scheme: light;
+  --bg: #F6F1E8;
+  --surface: #FFFCF6;
+  --surface-2: #EFE8DA;
+  --ink: #0E2238;
+  --muted: #52616F;
+  --line: #DDD3C0;
+  --teal: #12808A;
+  --teal-dark: #0B5B63;
+  --orange: #E4702B;
+  --orange-soft: #FBE6D6;
+  --navy: #0E2238;
+  --on-navy: #F6F1E8;
+  --navy-muted: #A9B8C8;
+  --shadow: 0 2px 5px rgba(14,34,56,.05), 0 16px 42px rgba(14,34,56,.10);
+  --shadow-hover: 0 8px 16px rgba(14,34,56,.08), 0 24px 55px rgba(14,34,56,.16);
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "DM Mono", ui-monospace, monospace;
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.65 var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .16;
+  background-image: radial-gradient(rgba(14,34,56,.16) .6px, transparent .6px);
+  background-size: 7px 7px;
+}
+a { color: inherit; text-underline-offset: 4px; }
+button, input, select { font: inherit; }
+img, svg { max-width: 100%; }
+::selection { background: var(--orange); color: #1B0F05; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 7px; }
+
+.wrap {
+  width: min(1160px, 100%);
+  margin-inline: auto;
+  padding-inline: max(22px, env(safe-area-inset-left));
+}
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--display);
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+p { margin: 0; }
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--orange);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.s { padding-block: 94px; }
+.s.alt { background: var(--surface-2); }
+
+/* ── Navigation ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(14,34,56,.96);
+  color: var(--on-navy);
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav .wrap {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--on-navy);
+  text-decoration: none;
+  font: 800 23px/1 var(--display);
+  letter-spacing: -.04em;
+  white-space: nowrap;
+}
+.brand svg { width: 31px; height: 31px; flex: none; }
+.brand i { color: var(--navy-muted); font-style: normal; font-weight: 500; }
+.links { display: flex; align-items: center; gap: 30px; }
+.links a {
+  color: var(--navy-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s ease, transform .2s ease, background .2s ease;
+}
+.links a:hover, .links a[aria-current="page"] { color: var(--on-navy); }
+.links a:not(.cta):hover { transform: translateY(-2px); }
+.links .cta {
+  padding: 11px 18px;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #1B0F05;
+  box-shadow: 0 4px 0 rgba(130,55,17,.45);
+}
+.links .cta:hover { transform: translateY(2px); box-shadow: 0 2px 0 rgba(130,55,17,.45); }
+
+/* ── Blog Hero ── */
+.blog-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 86px 0 100px;
+  color: var(--on-navy);
+  background:
+    radial-gradient(ellipse at 75% 15%, rgba(18,128,138,.30), transparent 38%),
+    radial-gradient(ellipse at 15% 90%, rgba(228,112,43,.18), transparent 38%),
+    var(--navy);
+}
+.blog-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .07;
+  background-image: radial-gradient(rgba(246,241,232,.7) .6px, transparent .6px);
+  background-size: 7px 7px;
+}
+.blog-hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+.blog-hero .eyebrow { color: #F28C4E; margin-bottom: 0; }
+.blog-hero h1 {
+  font-size: clamp(44px, 6vw, 70px);
+  letter-spacing: -.055em;
+  line-height: .98;
+  max-width: 760px;
+  animation: rise-in .8s both cubic-bezier(.2,.7,.2,1);
+}
+.blog-hero h1 em {
+  color: #F28C4E;
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+}
+.blog-hero h1 em::after {
+  content: "";
+  position: absolute;
+  left: 2px; right: 2px; bottom: -6px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underline-in .75s .55s forwards;
+}
+.blog-hero p.lead {
+  max-width: 600px;
+  color: var(--navy-muted);
+  font-size: clamp(15.5px, 1.4vw, 17.5px);
+  line-height: 1.75;
+  animation: rise-in .8s .15s both cubic-bezier(.2,.7,.2,1);
+}
+
+/* ── Search + Filter bar ── */
+.filter-bar {
+  margin-top: 34px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  animation: rise-in .8s .22s both cubic-bezier(.2,.7,.2,1);
+}
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  max-width: 380px;
+}
+.search-wrap svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--navy-muted);
+  pointer-events: none;
+  width: 17px; height: 17px;
+}
+.search-input {
+  width: 100%;
+  padding: 11px 14px 11px 42px;
+  border: 1.5px solid rgba(246,241,232,.2);
+  border-radius: 12px;
+  background: rgba(255,255,255,.07);
+  color: var(--on-navy);
+  font-size: 14px;
+  transition: border-color .2s, background .2s;
+}
+.search-input::placeholder { color: var(--navy-muted); }
+.search-input:focus { outline: none; border-color: var(--teal); background: rgba(255,255,255,.12); }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.fchip {
+  padding: 9px 16px;
+  border: 1.5px solid rgba(246,241,232,.2);
+  border-radius: 99px;
+  background: rgba(255,255,255,.06);
+  color: var(--navy-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s, transform .2s;
+}
+.fchip:hover, .fchip.active {
+  background: var(--orange);
+  color: #1B0F05;
+  border-color: var(--orange);
+  transform: translateY(-2px);
+}
+
+/* ── Featured / Hero Article ── */
+.featured-article {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+}
+.featured-article:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+.feat-img {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #12808A 0%, #0E2238 100%);
+}
+.feat-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.featured-article:hover .feat-img img { transform: scale(1.04); }
+.feat-img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #12808A 0%, #0B3B40 60%, #0E2238 100%);
+}
+.feat-img-placeholder svg {
+  width: 90px;
+  height: 90px;
+  opacity: .22;
+  color: white;
+}
+.feat-img-label {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.feat-badge {
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: var(--orange);
+  color: #1B0F05;
+  font: 600 11px var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.feat-read-time {
+  padding: 5px 11px;
+  border-radius: 99px;
+  background: rgba(0,0,0,.35);
+  color: rgba(255,255,255,.85);
+  font: 500 11px var(--mono);
+  letter-spacing: .05em;
+  backdrop-filter: blur(6px);
+}
+.feat-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 46px 44px;
+}
+.feat-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.feat-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+.feat-category {
+  color: var(--teal-dark);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.feat-body h2 {
+  font-size: clamp(24px, 2.6vw, 34px);
+  letter-spacing: -.04em;
+  line-height: 1.1;
+  transition: color .2s;
+}
+.featured-article:hover .feat-body h2 { color: var(--teal-dark); }
+.feat-body p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.72;
+}
+.feat-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.author-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--navy));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font: 700 15px var(--display);
+  flex: none;
+}
+.author-info { display: flex; flex-direction: column; gap: 2px; }
+.author-name { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+.author-role { font-size: 11.5px; color: var(--muted); }
+.read-more-arrow {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--teal-dark);
+  font: 600 13px var(--body);
+  transition: gap .2s ease;
+}
+.featured-article:hover .read-more-arrow { gap: 10px; }
+
+/* ── Article Grid ── */
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 22px;
+}
+.article-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(14,34,56,.035);
+  text-decoration: none;
+  color: inherit;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+.article-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(18,128,138,.45);
+  box-shadow: var(--shadow-hover);
+}
+.card-img {
+  position: relative;
+  height: 198px;
+  overflow: hidden;
+  flex: none;
+}
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.article-card:hover .card-img img { transform: scale(1.06); }
+.card-img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-img-placeholder svg {
+  width: 52px; height: 52px;
+  opacity: .28;
+  color: white;
+}
+.card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(5,15,26,.5) 100%);
+  pointer-events: none;
+}
+.card-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 4px 11px;
+  border-radius: 99px;
+  background: rgba(0,0,0,.38);
+  color: rgba(255,255,255,.92);
+  font: 600 10.5px var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.card-read-time {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: rgba(0,0,0,.38);
+  color: rgba(255,255,255,.85);
+  font: 500 10.5px var(--mono);
+  backdrop-filter: blur(8px);
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+  padding: 22px 22px 20px;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.card-category {
+  color: var(--teal-dark);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.card-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--line); }
+.card-body h3 {
+  font-size: 19px;
+  letter-spacing: -.03em;
+  line-height: 1.18;
+  transition: color .2s;
+}
+.article-card:hover .card-body h3 { color: var(--teal-dark); }
+.card-body p {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.68;
+  flex: 1;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+.card-author {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.card-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), #934314);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font: 700 11px var(--display);
+  flex: none;
+}
+.card-author-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.card-arrow {
+  width: 30px; height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+  font-size: 14px;
+  transition: background .2s, border-color .2s, color .2s, transform .2s;
+}
+.article-card:hover .card-arrow {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--on-navy);
+  transform: rotate(45deg);
+}
+
+/* ── Side panel (newsletter + popular) ── */
+.blog-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 310px;
+  gap: 36px;
+  align-items: start;
+}
+.sticky-panel {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.panel-box {
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(14,34,56,.035);
+}
+.panel-box h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.panel-box p {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+.email-form { display: flex; flex-direction: column; gap: 10px; }
+.email-input {
+  padding: 11px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 11px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13.5px;
+  transition: border-color .2s;
+}
+.email-input:focus { outline: none; border-color: var(--teal); }
+.email-input::placeholder { color: var(--muted); }
+.btn-sub {
+  padding: 11px 16px;
+  border: none;
+  border-radius: 11px;
+  background: var(--orange);
+  color: #1B0F05;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(130,55,17,.4);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-sub:hover { transform: translateY(2px); box-shadow: 0 2px 0 rgba(130,55,17,.4); }
+.sub-note { font-size: 11px !important; color: var(--muted); margin-bottom: 0 !important; }
+.popular-list { display: flex; flex-direction: column; gap: 0; list-style: none; padding: 0; margin: 0; }
+.popular-list li { padding: 13px 0; border-bottom: 1px solid var(--line); }
+.popular-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.pop-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 13px;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+}
+.pop-num {
+  font: 700 13px var(--mono);
+  color: var(--orange);
+  min-width: 20px;
+  margin-top: 2px;
+}
+.pop-title {
+  font: 600 13.5px/1.4 var(--display);
+  color: var(--ink);
+  letter-spacing: -.02em;
+  transition: color .2s;
+}
+.pop-link:hover .pop-title { color: var(--teal-dark); }
+.pop-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* Tags cloud panel */
+.tags-cloud { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+.tag-pill {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--bg);
+  color: var(--teal-dark);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s, color .2s, transform .2s, border-color .2s;
+}
+.tag-pill:hover { background: var(--navy); color: white; border-color: var(--navy); transform: translateY(-2px); }
+
+/* ── Load More / Pagination ── */
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 42px;
+}
+.btn-load {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 28px;
+  border: 2px solid var(--navy);
+  border-radius: 13px;
+  background: transparent;
+  color: var(--navy);
+  font: 700 14px var(--body);
+  cursor: pointer;
+  transition: background .22s, color .22s, transform .22s;
+}
+.btn-load:hover { background: var(--navy); color: var(--on-navy); transform: translateY(-3px); }
+
+/* ── Topics section ── */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 14px;
+}
+.topic-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 26px 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(14,34,56,.035);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, border-color .3s, background .3s;
+  text-align: center;
+}
+.topic-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(18,128,138,.45);
+  box-shadow: var(--shadow-hover);
+  background: var(--navy);
+  color: var(--on-navy);
+}
+.topic-icon {
+  font-size: 32px;
+  width: 58px; height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: var(--orange-soft);
+  transition: transform .3s, background .3s;
+}
+.topic-card:hover .topic-icon { transform: rotate(-8deg) scale(1.1); background: rgba(255,255,255,.12); }
+.topic-card h4 { font-size: 16px; letter-spacing: -.03em; }
+.topic-card p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 2px; transition: color .3s; }
+.topic-card:hover p { color: var(--navy-muted); }
+.topic-count {
+  font: 600 11px var(--mono);
+  color: var(--orange);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Newsletter Band ── */
+.nl-band {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: clamp(36px, 5vw, 60px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 36px;
+  align-items: center;
+  color: var(--on-navy);
+  background:
+    radial-gradient(circle at 90% 15%, rgba(61,183,192,.24), transparent 30%),
+    radial-gradient(circle at 10% 85%, rgba(228,112,43,.18), transparent 32%),
+    var(--navy);
+  box-shadow: var(--shadow);
+}
+.nl-band::after {
+  content: "✉";
+  position: absolute;
+  right: 22%; top: -50px;
+  color: rgba(246,241,232,.06);
+  font-size: 200px;
+  line-height: 1;
+  pointer-events: none;
+}
+.nl-band h2 { font-size: clamp(24px, 3.4vw, 38px); max-width: 540px; }
+.nl-band p { margin-top: 10px; color: var(--navy-muted); font-size: 15px; max-width: 500px; }
+.nl-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; }
+.nl-input {
+  padding: 13px 18px;
+  border: 1.5px solid rgba(246,241,232,.2);
+  border-radius: 12px;
+  background: rgba(255,255,255,.08);
+  color: var(--on-navy);
+  font-size: 14px;
+  min-width: 230px;
+  transition: border-color .2s, background .2s;
+}
+.nl-input::placeholder { color: var(--navy-muted); }
+.nl-input:focus { outline: none; border-color: var(--teal); background: rgba(255,255,255,.13); }
+.nl-btn {
+  padding: 13px 22px;
+  border: none;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #1B0F05;
+  font: 700 14px var(--body);
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(130,55,17,.45);
+  transition: transform .2s, box-shadow .2s;
+  white-space: nowrap;
+}
+.nl-btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 rgba(130,55,17,.45); }
+
+/* ── Footer ── */
+.footer {
+  padding: 48px 0 38px;
+  background: #091827;
+  color: var(--navy-muted);
+}
+.footer .wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+.footer p { max-width: 560px; margin-top: 10px; font-size: 13px; line-height: 1.7; }
+.footer a { color: var(--navy-muted); font-size: 14px; line-height: 2.2; text-decoration: none; }
+.footer a:hover { color: var(--on-navy); }
+.footer b { color: var(--on-navy) !important; font-family: var(--display); }
+
+/* ── Scroll reveal ── */
+.js-reveal .rv {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.js-reveal .rv.in-view { opacity: 1; transform: translateY(0); }
+.js-reveal .article-grid .rv:nth-child(2) { transition-delay: .07s; }
+.js-reveal .article-grid .rv:nth-child(3) { transition-delay: .14s; }
+.js-reveal .topics-grid .rv:nth-child(2) { transition-delay: .07s; }
+.js-reveal .topics-grid .rv:nth-child(3) { transition-delay: .14s; }
+.js-reveal .topics-grid .rv:nth-child(4) { transition-delay: .21s; }
+
+/* ── Keyframes ── */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(25px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes underline-in { to { transform: scaleX(1); } }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .blog-layout { grid-template-columns: 1fr; }
+  .sticky-panel { position: static; flex-direction: row; flex-wrap: wrap; }
+  .sticky-panel .panel-box { flex: 1; min-width: 260px; }
+}
+@media (max-width: 900px) {
+  .featured-article { grid-template-columns: 1fr; }
+  .feat-img { min-height: 280px; }
+  .article-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .topics-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .nl-band { grid-template-columns: 1fr; }
+  .s { padding-block: 76px; }
+}
+@media (max-width: 650px) {
+  .wrap { padding-inline: 19px; }
+  .nav .wrap { min-height: 68px; }
+  .links { gap: 14px; }
+  .links a:not(.cta) { display: none; }
+  .links .cta { padding: 10px 13px; font-size: 12px; }
+  .brand { font-size: 21px; }
+  .brand svg { width: 28px; }
+  .article-grid { grid-template-columns: 1fr; }
+  .topics-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .feat-body { padding: 28px 24px; }
+  .s { padding-block: 62px; }
+  .nl-band { padding: 30px 24px; }
+  .nl-band::after { font-size: 130px; right: -20px; }
+  .footer .wrap { flex-direction: column; gap: 22px; }
+  .sticky-panel { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .js-reveal .rv { opacity: 1; transform: none; }
+}
+</style>
+</head><body>
+
+<!-- ═══════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════ -->
+<header class="nav"><div class="wrap">
+  <a class="brand" href="../index-standalone.html">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#E4702B"/><path d="M26 16 7 8l3 7 8 1-8 1-3 7z" fill="#0E2238"/></svg>
+    Safar<i>Planner</i>
+  </a>
+  <nav class="links" aria-label="Main">
+    <a href="../index-standalone.html">Home</a>
+    <a href="../plan-connected.html">Plan a trip</a>
+    <a href="index.html" aria-current="page">Blog</a>
+    <a class="cta" href="../plan-connected.html">Start planning</a>
+  </nav>
+</div></header>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════
+     BLOG HERO
+════════════════════════════════════════════════ -->
+<section class="blog-hero">
+  <div class="wrap blog-hero-inner">
+    <p class="eyebrow">Safar Planner — Travel Journal</p>
+    <h1>Stories, guides &amp;<br><em>honest advice</em></h1>
+    <p class="lead">Destination deep-dives, real budget breakdowns, packing lists and insider tips — written for travellers who want more from every trip.</p>
+
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="search-input" type="search" placeholder="Search guides, destinations…" aria-label="Search blog posts">
+      </div>
+      <div class="filter-chips" role="group" aria-label="Filter by category">
+        <button class="fchip active" data-filter="all">All</button>
+        <button class="fchip" data-filter="planning">Planning</button>
+        <button class="fchip" data-filter="itinerary">Itineraries</button>
+        <button class="fchip" data-filter="budget">Budget Tips</button>
+        <button class="fchip" data-filter="destinations">Destinations</button>
+        <button class="fchip" data-filter="packing">Packing</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FEATURED ARTICLE
+════════════════════════════════════════════════ -->
+<section class="s" style="padding-top: 60px; padding-bottom: 0;">
+  <div class="wrap">
+    <p class="eyebrow rv">Editor's pick</p>
+    <a class="featured-article rv" href="leh-ladakh-complete-guide.html">
+      <div class="feat-img">
+        <div class="feat-img-placeholder" aria-hidden="true">
+          <!-- Mountain icon placeholder — swap this div for <img src="../images/leh.jfif" alt="Leh Ladakh landscape"> -->
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z"/></svg>
+        </div>
+        <!-- PHOTO SLOT ↓  Replace the placeholder above with this img tag and add the src -->
+        <!-- <img src="../images/leh.jfif" alt="Leh-Ladakh high altitude landscape with monasteries"> -->
+        <div class="feat-img-label">
+          <span class="feat-badge">Featured</span>
+          <span class="feat-read-time">12 min read</span>
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="feat-meta">
+          <span class="feat-category">Destinations</span>
+          <span class="dot"></span>
+          <span>Nov 4, 2026</span>
+          <span class="dot"></span>
+          <span>Leh-Ladakh</span>
+        </div>
+        <h2>Leh-Ladakh on ₹25,000: The Complete First-Timer's Guide</h2>
+        <p>High altitude, high drama — and yes, entirely doable on a tight budget. We cover the permit process, best months to visit, how to acclimatise safely, and a day-by-day route for 7 nights that won't blow your savings.</p>
+        <div class="feat-footer">
+          <div class="author-avatar" aria-hidden="true">R</div>
+          <div class="author-info">
+            <span class="author-name">Rohit Verma</span>
+            <span class="author-role">Travel Editor</span>
+          </div>
+          <span class="read-more-arrow" aria-hidden="true">Read guide →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN BLOG CONTENT + SIDEBAR
+════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="wrap">
+    <div class="blog-layout">
+
+      <!-- Left: Article Grid -->
+      <div>
+        <p class="eyebrow rv" style="margin-bottom:20px;">Latest articles</p>
+        <div class="article-grid">
+
+          <!-- CARD 1 -->
+          <a class="article-card rv" href="budget-trip-planning-india-guide.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#E4702B,#7a2d0a)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.06-7.44 7-7.93v15.86zm2 0V4.07c3.94.49 7 3.85 7 7.93s-3.06 7.44-7 7.93z"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/jaipur.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Planning</span>
+              <span class="card-read-time">8 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Planning</span>
+                <span class="card-dot"></span>
+                <span>Oct 28, 2026</span>
+              </div>
+              <h3>How to plan a budget trip in India, step by step</h3>
+              <p>A simple order of decisions that keeps your total under control — from choosing dates to your first booking.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true">P</div>
+                  <span class="card-author-name">Priya Nair</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 2 -->
+          <a class="article-card rv" href="jaipur-3-day-budget-itinerary.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#B4521E,#5a1a0a)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/jaipur.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Itinerary</span>
+              <span class="card-read-time">6 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Itinerary</span>
+                <span class="card-dot"></span>
+                <span>Oct 20, 2026</span>
+              </div>
+              <h3>A 3-day Jaipur itinerary that respects your budget</h3>
+              <p>Forts early, bazaars late, and where to save. We built this itinerary around ₹8,000 per person including stay.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true">R</div>
+                  <span class="card-author-name">Rohit Verma</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 3 -->
+          <a class="article-card rv" href="goa-off-season-tips.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#12808A,#0b3b40)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.127 14.56l1.43-1.43 6.44 6.443L19.57 21zm4.293-5.73l2.86-2.86 1.43 1.43-2.86 2.86-1.43-1.43zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.46a.996.996 0 000-1.41L18.37.44a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/goa.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Budget Tips</span>
+              <span class="card-read-time">5 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Budget Tips</span>
+                <span class="card-dot"></span>
+                <span>Oct 12, 2026</span>
+              </div>
+              <h3>Why off-season Goa is better (and cheaper) than you think</h3>
+              <p>Rain-washed beaches, half-price rooms and zero tourist crowds. Here's how to do Goa in monsoon smartly.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true" style="background: linear-gradient(135deg,#12808A,#0b3b40)">S</div>
+                  <span class="card-author-name">Sara Menon</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 4 -->
+          <a class="article-card rv" href="spiti-valley-road-trip.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#4A6FA5,#0E2238)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/spiti.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Itinerary</span>
+              <span class="card-read-time">11 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Itinerary</span>
+                <span class="card-dot"></span>
+                <span>Oct 5, 2026</span>
+              </div>
+              <h3>Spiti Valley road trip: 10-day route for beginners</h3>
+              <p>Altitude permits, safe driving windows, the best homestays and the two routes compared — Shimla side vs. Manali side.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true" style="background: linear-gradient(135deg,#4A6FA5,#0E2238)">A</div>
+                  <span class="card-author-name">Arjun Singh</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 5 -->
+          <a class="article-card rv" href="kerala-backwaters-alleppey.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#2E7D32,#0E2238)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/alle.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Destinations</span>
+              <span class="card-read-time">7 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Destinations</span>
+                <span class="card-dot"></span>
+                <span>Sep 29, 2026</span>
+              </div>
+              <h3>Kerala backwaters: houseboat or kayak — which is worth it?</h3>
+              <p>An honest cost and experience comparison of the two ways to see Alleppey's waterways, and who each suits.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true" style="background: linear-gradient(135deg,#2E7D32,#1a3c1a)">P</div>
+                  <span class="card-author-name">Priya Nair</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 6 -->
+          <a class="article-card rv" href="backpack-india-packing-list.html">
+            <div class="card-img" style="background: linear-gradient(135deg,#8D4E0A,#3B1F05)">
+              <div class="card-img-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.33C18 2.54 15.96.6 13.5.6S9 2.54 9 4.67c0 .45.11.89.18 1.33H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3.4c1.14 0 1.5.86 1.5 2.07 0 .45-.11.89-.18 1.33h-2.64c-.07-.44-.18-.88-.18-1.33 0-1.21.36-2.07 1.5-2.07z"/></svg>
+              </div>
+              <!-- PHOTO SLOT: <img src="../images/kasol.jfif" alt="…"> -->
+              <div class="card-img-overlay"></div>
+              <span class="card-tag">Packing</span>
+              <span class="card-read-time">9 min</span>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-category">Packing</span>
+                <span class="card-dot"></span>
+                <span>Sep 18, 2026</span>
+              </div>
+              <h3>The only packing list you need for a 2-week India backpacking trip</h3>
+              <p>Exactly what to bring, what to leave home, and the one thing most people forget — tested across hills, deserts and coasts.</p>
+              <div class="card-footer">
+                <div class="card-author">
+                  <div class="card-avatar" aria-hidden="true" style="background: linear-gradient(135deg,#8D4E0A,#3B1F05)">S</div>
+                  <span class="card-author-name">Sara Menon</span>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
+
+        </div><!-- /article-grid -->
+
+        <!-- Load More -->
+        <div class="load-more-wrap rv">
+          <button class="btn-load" id="loadMoreBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            Load more articles
+          </button>
+        </div>
+
+      </div><!-- /left col -->
+
+      <!-- Right: Sticky Panel -->
+      <aside class="sticky-panel" aria-label="Blog sidebar">
+
+        <!-- Newsletter -->
+        <div class="panel-box">
+          <h4>Get new guides first</h4>
+          <p>One email a week. No fluff — just new itineraries, budget finds and destination guides.</p>
+          <form class="email-form" onsubmit="handleSubscribe(event)">
+            <input class="email-input" type="email" placeholder="your@email.com" required aria-label="Email address">
+            <button class="btn-sub" type="submit">Subscribe →</button>
+          </form>
+          <p class="sub-note" style="margin-top:10px;">No spam. Unsubscribe any time.</p>
+        </div>
+
+        <!-- Popular posts -->
+        <div class="panel-box">
+          <h4>Most read</h4>
+          <ul class="popular-list">
+            <li>
+              <a class="pop-link" href="leh-ladakh-complete-guide.html">
+                <span class="pop-num">01</span>
+                <div>
+                  <div class="pop-title">Leh-Ladakh on ₹25,000: The Complete Guide</div>
+                  <div class="pop-meta">12 min · Destinations</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="pop-link" href="budget-trip-planning-india-guide.html">
+                <span class="pop-num">02</span>
+                <div>
+                  <div class="pop-title">How to plan a budget trip in India, step by step</div>
+                  <div class="pop-meta">8 min · Planning</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="pop-link" href="spiti-valley-road-trip.html">
+                <span class="pop-num">03</span>
+                <div>
+                  <div class="pop-title">Spiti Valley road trip: 10-day route for beginners</div>
+                  <div class="pop-meta">11 min · Itinerary</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="pop-link" href="backpack-india-packing-list.html">
+                <span class="pop-num">04</span>
+                <div>
+                  <div class="pop-title">The only packing list you need for 2 weeks</div>
+                  <div class="pop-meta">9 min · Packing</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="pop-link" href="goa-off-season-tips.html">
+                <span class="pop-num">05</span>
+                <div>
+                  <div class="pop-title">Why off-season Goa is better than you think</div>
+                  <div class="pop-meta">5 min · Budget Tips</div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tags -->
+        <div class="panel-box">
+          <h4>Browse by topic</h4>
+          <div class="tags-cloud">
+            <a class="tag-pill" href="#">Rajasthan</a>
+            <a class="tag-pill" href="#">Solo travel</a>
+            <a class="tag-pill" href="#">Himalayas</a>
+            <a class="tag-pill" href="#">Beaches</a>
+            <a class="tag-pill" href="#">Family trips</a>
+            <a class="tag-pill" href="#">Train travel</a>
+            <a class="tag-pill" href="#">Wildlife</a>
+            <a class="tag-pill" href="#">Heritage</a>
+            <a class="tag-pill" href="#">Monsoon</a>
+            <a class="tag-pill" href="#">Weekend</a>
+            <a class="tag-pill" href="#">Hostels</a>
+            <a class="tag-pill" href="#">South India</a>
+          </div>
+        </div>
+
+      </aside>
+    </div><!-- /blog-layout -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     TOPICS / CATEGORIES
+════════════════════════════════════════════════ -->
+<section class="s alt">
+  <div class="wrap">
+    <p class="eyebrow rv">What are you looking for?</p>
+    <h2 class="rv" style="font-size: clamp(28px,4vw,44px); margin-bottom: 36px;">Browse by topic</h2>
+    <div class="topics-grid">
+      <a class="topic-card rv" href="#" data-filter="planning">
+        <div class="topic-icon">🗓️</div>
+        <h4>Trip Planning</h4>
+        <p>Build your trip from scratch, whatever your budget.</p>
+        <span class="topic-count">14 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="itinerary">
+        <div class="topic-icon">🗺️</div>
+        <h4>Itineraries</h4>
+        <p>Day-by-day routes with timing and cost estimates.</p>
+        <span class="topic-count">22 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="budget">
+        <div class="topic-icon">💸</div>
+        <h4>Budget Tips</h4>
+        <p>Save without sacrificing the best of a destination.</p>
+        <span class="topic-count">11 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="destinations">
+        <div class="topic-icon">📍</div>
+        <h4>Destinations</h4>
+        <p>Everything you need to know before you arrive.</p>
+        <span class="topic-count">30 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="packing">
+        <div class="topic-icon">🎒</div>
+        <h4>Packing Lists</h4>
+        <p>Tested lists for every terrain, season and trip type.</p>
+        <span class="topic-count">8 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="food">
+        <div class="topic-icon">🍛</div>
+        <h4>Food Guides</h4>
+        <p>What to eat, where to eat, and what to avoid.</p>
+        <span class="topic-count">9 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="transport">
+        <div class="topic-icon">🚆</div>
+        <h4>Getting There</h4>
+        <p>Trains, buses, flights — the fastest and cheapest routes.</p>
+        <span class="topic-count">7 guides</span>
+      </a>
+      <a class="topic-card rv" href="#" data-filter="solo">
+        <div class="topic-icon">🧍</div>
+        <h4>Solo Travel</h4>
+        <p>Safety, savings and the freedom of going alone.</p>
+        <span class="topic-count">10 guides</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     NEWSLETTER BAND
+════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="wrap">
+    <div class="nl-band rv">
+      <div>
+        <p class="eyebrow" style="color:#F28C4E; margin-bottom: 10px;">Stay in the loop</p>
+        <h2>New guides every week,<br>straight to your inbox</h2>
+        <p>Join 4,200+ travellers who get destination guides, budget finds and new itineraries before they go live on the blog.</p>
+      </div>
+      <div>
+        <form class="nl-form" onsubmit="handleSubscribe(event)">
+          <input class="nl-input" type="email" placeholder="your@email.com" required aria-label="Email address for newsletter">
+          <button class="nl-btn" type="submit">Subscribe →</button>
+        </form>
+        <p style="margin-top: 10px; color: var(--navy-muted); font-size: 12px;">No spam, ever. Unsubscribe with one click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     USEFUL LINKS
+════════════════════════════════════════════════ -->
+<section class="s alt" style="padding-block: 56px;">
+  <div class="wrap">
+    <p class="eyebrow rv" style="margin-bottom: 20px;">Quick links</p>
+    <div class="rv" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px 32px; border-top: 1px solid var(--line); padding-top: 24px;">
+      <div>
+        <p style="font: 700 11px var(--mono); letter-spacing: .10em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Popular Guides</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
+          <li><a href="leh-ladakh-complete-guide.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Leh-Ladakh Complete Guide →</a></li>
+          <li><a href="spiti-valley-road-trip.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Spiti Valley Road Trip →</a></li>
+          <li><a href="kerala-backwaters-alleppey.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Kerala Backwaters Guide →</a></li>
+          <li><a href="goa-off-season-tips.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Off-Season Goa Tips →</a></li>
+          <li><a href="jaipur-3-day-budget-itinerary.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Jaipur 3-Day Itinerary →</a></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font: 700 11px var(--mono); letter-spacing: .10em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Categories</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Trip Planning (14)</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Itineraries (22)</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Budget Tips (11)</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Destinations (30)</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Packing Lists (8)</a></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font: 700 11px var(--mono); letter-spacing: .10em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Destinations</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
+          <li><a href="../plan-connected.html?dest=leh" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Plan Leh-Ladakh trip</a></li>
+          <li><a href="../plan-connected.html?dest=jaipur" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Plan Jaipur trip</a></li>
+          <li><a href="../plan-connected.html?dest=goa" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Plan Goa trip</a></li>
+          <li><a href="../plan-connected.html?dest=munnar" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">Plan Munnar trip</a></li>
+          <li><a href="../plan-connected.html" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">See all 45 destinations →</a></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font: 700 11px var(--mono); letter-spacing: .10em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Follow & Subscribe</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
+          <li><a href="feed.xml" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">📡 RSS Feed</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">🐦 Twitter / X</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">📸 Instagram</a></li>
+          <li><a href="#" style="font-size:14px; text-decoration:none; color:var(--teal-dark); font-weight:600; transition:color .2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--teal-dark)'">▶️ YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer class="footer"><div class="wrap">
+  <div>
+    <b style="color:var(--on-navy);font-size:18px">Safar Planner</b>
+    <p>Plan any trip around the money you have. Photos from Wikipedia and Wikimedia Commons, licences vary by image. Maps by Google.</p>
+  </div>
+  <div>
+    <a href="../plan-connected.html">Plan a trip</a><br>
+    <a href="index.html">Blog</a><br>
+    <a href="feed.xml">RSS feed</a>
+  </div>
+</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/config.js"></script>
+<script>
+// ── Scroll reveal ──
+(() => {
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js-reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.rv').forEach((el) => observer.observe(el));
+})();
+
+// ── Filter chips ──
+document.querySelectorAll('.fchip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fchip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Wire to real filtering when backend is ready
+  });
+});
+
+// ── Newsletter subscribe (stub) ──
+function handleSubscribe(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const original = btn.textContent;
+  btn.textContent = '✓ You\'re in!';
+  btn.style.background = 'var(--teal)';
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.style.background = '';
+    e.target.reset();
+  }, 3200);
+}
+
+// ── Load More stub ──
+document.getElementById('loadMoreBtn').addEventListener('click', function() {
+  this.textContent = 'Loading…';
+  setTimeout(() => { this.textContent = 'No more articles yet — check back soon!'; this.disabled = true; }, 1200);
+});
+
+// ══════════════════════════════════════════
+//  LOAD POSTS FROM SUPABASE
+// ══════════════════════════════════════════
+const blogEscape = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let allBlogPosts=[];
+function blogDate(value){return value?new Date(value).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):''}
+function renderBlogPosts(posts){
+  const featured=posts.find(p=>p.is_featured)||posts[0];
+  const fa=document.querySelector('.featured-article');
+  if(featured&&fa){fa.style.display='grid';fa.href='blog-post.html?slug='+encodeURIComponent(featured.slug);const img=fa.querySelector('.feat-img');img.querySelectorAll('img').forEach(x=>x.remove());const ph=img.querySelector('.feat-img-placeholder');if(featured.cover_url){ph.style.display='none';const el=document.createElement('img');el.src=featured.cover_url;el.alt=featured.title;img.prepend(el)}else ph.style.display='flex';fa.querySelector('h2').textContent=featured.title;fa.querySelector('.feat-body > p').textContent=featured.excerpt||'';fa.querySelector('.feat-category').textContent=featured.category||'General';fa.querySelector('.feat-meta span:nth-child(3)').textContent=blogDate(featured.published_at);fa.querySelector('.feat-read-time').textContent=(featured.read_time_min||5)+' min read';fa.querySelector('.author-name').textContent=featured.author||'Safar Planner';fa.querySelector('.author-avatar').textContent=(featured.author||'S').charAt(0).toUpperCase()}
+  else if(fa)fa.style.display='none';
+  const grid=document.querySelector('.article-grid');const gridPosts=posts.filter(p=>!featured||p.id!==featured.id);
+  grid.innerHTML=gridPosts.map((p,i)=>`<a class="article-card rv" data-post-card href="blog-post.html?slug=${encodeURIComponent(p.slug)}"><div class="card-img" style="background:linear-gradient(135deg,#12808A,#0E2238)">${p.cover_url?`<img src="${blogEscape(p.cover_url)}" alt="${blogEscape(p.title)}">`:'<div class="card-img-placeholder" aria-hidden="true">✦</div>'}<div class="card-img-overlay"></div><span class="card-tag">${blogEscape(p.category||'General')}</span><span class="card-read-time">${p.read_time_min||5} min</span></div><div class="card-body"><div class="card-meta"><span class="card-category">${blogEscape(p.category||'General')}</span><span class="card-dot"></span><span>${blogDate(p.published_at)}</span></div><h3>${blogEscape(p.title)}</h3><p>${blogEscape(p.excerpt)}</p><div class="card-footer"><div class="card-author"><div class="card-avatar">${blogEscape((p.author||'S').charAt(0).toUpperCase())}</div><span class="card-author-name">${blogEscape(p.author||'Safar Planner')}</span></div><span class="card-arrow">↗</span></div></div></a>`).join('')||'<p>No articles published yet. Please check back soon.</p>';
+  const pop=document.querySelector('.popular-list');if(pop)pop.innerHTML=posts.slice(0,5).map((p,i)=>`<li><a class="pop-link" href="blog-post.html?slug=${encodeURIComponent(p.slug)}"><span class="pop-num">0${i+1}</span><div><div class="pop-title">${blogEscape(p.title)}</div><div class="pop-meta">${p.read_time_min||5} min · ${blogEscape(p.category||'General')}</div></div></a></li>`).join('');
+  document.querySelectorAll('.article-grid .rv').forEach(el=>{if(window._rvObserver)window._rvObserver.observe(el)});
+}
+function filterBlog(){const term=(document.querySelector('.search-input')?.value||'').toLowerCase();const chip=document.querySelector('.fchip.active')?.dataset.filter||'all';const filtered=allBlogPosts.filter(p=>{const text=[p.title,p.excerpt,p.category,p.author].join(' ').toLowerCase();const category=(p.category||'').toLowerCase();const map={planning:'planning',itinerary:'itinerary',budget:'budget',destinations:'destination',packing:'packing'};return text.includes(term)&&(chip==='all'||category.includes(map[chip]||chip))});renderBlogPosts(filtered)}
+(async()=>{try{const sb=window.supabaseClient;if(!sb)return;const {data,error}=await sb.from('blog_posts').select('*').eq('is_published',true).order('published_at',{ascending:false});if(error)throw error;allBlogPosts=data||[];renderBlogPosts(allBlogPosts);document.querySelectorAll('.fchip').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.fchip').forEach(x=>x.classList.remove('active'));btn.classList.add('active');filterBlog()}));document.querySelector('.search-input')?.addEventListener('input',filterBlog);const more=document.getElementById('loadMoreBtn');if(more)more.style.display='none'}catch(err){console.warn('Blog posts could not be loaded:',err.message||err)}})();
+</script>
+</body></html>

@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Safar Planner · One-stop trip and itinerary planner for every budget</title>
+<meta name="description" content="Safar Planner builds a complete trip plan around your budget: solo, couple, family or group trips to 45 destinations across India, with travel, stay, food and a day-by-day itinerary on Google Maps.">
+<link rel="canonical" href="index-standalone.html"><meta property="og:title" content="Safar Planner · Plan any trip around your budget"><meta property="og:description" content="Travel, stay, food and a day-by-day itinerary on a real map, for every kind of trip.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   SAFAR PLANNER — HOMEPAGE STYLES
+   Matches the trip planner's navy / cream / teal / orange UI.
+   Linked from index-standalone.html as assets/site.css
+   ========================================================= */
+
+:root {
+  color-scheme: light;
+  --bg: #F6F1E8;
+  --surface: #FFFCF6;
+  --surface-2: #EFE8DA;
+  --ink: #0E2238;
+  --muted: #52616F;
+  --line: #DDD3C0;
+  --teal: #12808A;
+  --teal-dark: #0B5B63;
+  --orange: #E4702B;
+  --orange-soft: #FBE6D6;
+  --navy: #0E2238;
+  --on-navy: #F6F1E8;
+  --navy-muted: #A9B8C8;
+  --shadow: 0 2px 5px rgba(14,34,56,.05), 0 16px 42px rgba(14,34,56,.10);
+  --shadow-hover: 0 8px 16px rgba(14,34,56,.08), 0 24px 55px rgba(14,34,56,.16);
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "DM Mono", ui-monospace, monospace;
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.65 var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .16;
+  background-image: radial-gradient(rgba(14,34,56,.16) .6px, transparent .6px);
+  background-size: 7px 7px;
+}
+a { color: inherit; text-underline-offset: 4px; }
+button, input { font: inherit; }
+img, svg { max-width: 100%; }
+::selection { background: var(--orange); color: #1B0F05; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 7px; }
+
+.wrap {
+  width: min(1160px, 100%);
+  margin-inline: auto;
+  padding-inline: max(22px, env(safe-area-inset-left));
+}
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--display);
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+p { margin: 0; }
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--orange);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.s { padding-block: 94px; }
+.s.alt { background: var(--surface-2); }
+.sh { max-width: 760px; margin-bottom: 34px; }
+.sh h2 { font-size: clamp(30px, 4.2vw, 48px); }
+.sh > p:not(.eyebrow) {
+  max-width: 670px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+/* Navigation */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(14,34,56,.96);
+  color: var(--on-navy);
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav .wrap {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--on-navy);
+  text-decoration: none;
+  font: 800 23px/1 var(--display);
+  letter-spacing: -.04em;
+  white-space: nowrap;
+}
+.brand svg { width: 31px; height: 31px; flex: none; }
+.brand i { color: var(--navy-muted); font-style: normal; font-weight: 500; }
+.links { display: flex; align-items: center; gap: 30px; }
+.links a {
+  color: var(--navy-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s ease, transform .2s ease, background .2s ease;
+}
+.links a:hover, .links a[aria-current="page"] { color: var(--on-navy); }
+.links a:not(.cta):hover { transform: translateY(-2px); }
+.links .cta {
+  padding: 11px 18px;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #1B0F05;
+  box-shadow: 0 4px 0 rgba(130,55,17,.45);
+}
+.links .cta:hover { transform: translateY(2px); box-shadow: 0 2px 0 rgba(130,55,17,.45); }
+
+/* Hero */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 100px 0 112px;
+  color: var(--on-navy);
+  background:
+    radial-gradient(ellipse at 82% 25%, rgba(18,128,138,.28), transparent 34%),
+    radial-gradient(ellipse at 10% 100%, rgba(228,112,43,.15), transparent 34%),
+    var(--navy);
+}
+.hero::before, .hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(246,241,232,.10);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::before { width: 620px; height: 620px; right: -170px; top: -330px; }
+.hero::after { width: 460px; height: 460px; right: -90px; top: -250px; }
+.hero > .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+  align-items: center;
+  gap: 52px;
+  position: relative;
+}
+.hero .eyebrow { color: #F28C4E; }
+.hero h1 {
+  max-width: 720px;
+  font-size: clamp(46px, 6.4vw, 76px);
+  letter-spacing: -.055em;
+  line-height: .99;
+  animation: rise-in .8s both cubic-bezier(.2,.7,.2,1);
+}
+.hero h1 em {
+  color: #F28C4E;
+  font-style: normal;
+  display: inline-block;
+  position: relative;
+}
+.hero h1 em::after {
+  content: "";
+  position: absolute;
+  left: 2px; right: 2px; bottom: -7px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underline-in .75s .55s forwards;
+}
+.hero .lead {
+  max-width: 610px;
+  margin-top: 25px;
+  color: var(--navy-muted);
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.75;
+  animation: rise-in .8s .12s both cubic-bezier(.2,.7,.2,1);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin-top: 31px;
+  animation: rise-in .8s .22s both cubic-bezier(.2,.7,.2,1);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 49px;
+  padding: 12px 21px;
+  border: 1.5px solid transparent;
+  border-radius: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+.btn:hover { transform: translateY(-3px); }
+.btn.p {
+  background: var(--orange);
+  color: #1B0F05;
+  box-shadow: 0 5px 0 rgba(130,55,17,.45), 0 12px 24px rgba(228,112,43,.18);
+}
+.btn.p:hover { box-shadow: 0 8px 0 rgba(130,55,17,.35), 0 18px 30px rgba(228,112,43,.24); }
+.btn.g {
+  border-color: rgba(246,241,232,.25);
+  color: var(--on-navy);
+  background: rgba(255,255,255,.035);
+}
+.btn.g:hover { border-color: var(--teal); background: rgba(18,128,138,.15); }
+.btn.t { background: var(--teal); color: white; }
+.route {
+  position: absolute;
+  width: 100%;
+  height: 90px;
+  left: 0;
+  bottom: -72px;
+  opacity: .75;
+  pointer-events: none;
+}
+.route path { animation: dash-flow 24s linear infinite; }
+
+/* Destination collage */
+.collage {
+  min-height: 410px;
+  position: relative;
+  perspective: 1000px;
+  animation: rise-in .9s .18s both cubic-bezier(.2,.7,.2,1);
+}
+.ph {
+  position: absolute;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  border: 5px solid rgba(246,241,232,.88);
+  border-radius: 22px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,.28);
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+}
+.ph::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(5,17,29,.72));
+}
+.ph span {
+  position: relative;
+  color: white;
+  font: 700 22px var(--display);
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.ph.a { width: 61%; height: 68%; top: 0; left: 2%; z-index: 2; transform: rotate(-5deg); animation: float-a 7s ease-in-out infinite; }
+.ph.b { width: 52%; height: 58%; top: 33%; right: 0; z-index: 3; transform: rotate(6deg); animation: float-b 8s ease-in-out infinite; }
+.ph.c { width: 43%; height: 43%; bottom: -1%; left: 5%; z-index: 4; transform: rotate(4deg); animation: float-c 7.5s ease-in-out infinite; }
+.collage:hover .ph.a { transform: rotate(-2deg) translateY(-7px); }
+.collage:hover .ph.b { transform: rotate(3deg) translateY(-9px); }
+.collage:hover .ph.c { transform: rotate(1deg) translateY(-6px); }
+
+/* Stats strip */
+.stats {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: -38px;
+  padding: 25px 30px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.stats > div { padding: 4px 20px; border-right: 1px solid var(--line); }
+.stats > div:first-child { padding-left: 4px; }
+.stats > div:last-child { border: 0; }
+.stats b {
+  display: block;
+  color: var(--ink);
+  font: 800 clamp(22px, 2.8vw, 32px)/1.1 var(--display);
+  letter-spacing: -.04em;
+}
+.stats span { display: block; margin-top: 7px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+
+/* Cards and grids */
+.grid { display: grid; gap: 18px; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card {
+  position: relative;
+  min-width: 0;
+  padding: 25px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(14,34,56,.035);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+.card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(18,128,138,.45);
+  box-shadow: var(--shadow-hover);
+}
+.card .ico {
+  width: 49px; height: 49px;
+  display: grid; place-items: center;
+  margin-bottom: 19px;
+  border-radius: 15px;
+  background: var(--orange-soft);
+  font-size: 24px;
+  transition: transform .3s ease;
+}
+.card:hover .ico { transform: rotate(-8deg) scale(1.08); }
+.card h3 { font-size: 21px; }
+.card p { margin-top: 10px; color: var(--muted); font-size: 14.5px; line-height: 1.7; }
+
+/* How it works */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  list-style: none;
+  counter-reset: journey;
+}
+.steps li {
+  position: relative;
+  padding: 25px 24px 10px 0;
+  counter-increment: journey;
+}
+.steps li::before {
+  content: "0" counter(journey);
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  margin-bottom: 21px;
+  border-radius: 15px;
+  background: var(--navy);
+  color: var(--on-navy);
+  font: 500 14px var(--mono);
+  box-shadow: 5px 5px 0 rgba(18,128,138,.22);
+  transition: transform .25s ease, background .25s ease;
+}
+.steps li:hover::before { transform: translateY(-5px) rotate(-5deg); background: var(--teal-dark); }
+.steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 49px;
+  left: 62px;
+  width: calc(100% - 80px);
+  border-top: 2px dashed var(--line);
+}
+.steps h3 { font-size: 19px; }
+.steps p { margin-top: 9px; color: var(--muted); font-size: 14px; }
+
+/* Destination tiles */
+.dest {
+  min-height: 210px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid rgba(14,34,56,.12);
+  border-radius: 19px;
+  color: white;
+  text-decoration: none;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 5px 18px rgba(14,34,56,.09);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+}
+.dest::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,17,30,.02) 10%, rgba(7,17,30,.78) 100%);
+  transition: opacity .3s ease;
+}
+.dest::after {
+  content: "↗";
+  position: absolute;
+  right: 16px; top: 14px;
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 50%;
+  color: white;
+  opacity: 0;
+  transform: translate(-5px, 5px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.dest:hover { transform: translateY(-7px) scale(1.015); box-shadow: var(--shadow-hover); }
+.dest:hover::after { opacity: 1; transform: translate(0,0); }
+.dest > div { display: grid; gap: 2px; }
+.dest b { font: 800 23px var(--display); letter-spacing: -.03em; }
+.dest small { color: rgba(255,255,255,.8); font-size: 12px; }
+
+/* Chips, blog and note */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.chip:hover { background: var(--navy); color: white; transform: translateY(-2px); }
+.tag {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 99px;
+  background: var(--orange-soft);
+  color: #934314;
+  font: 500 11px var(--mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.note {
+  margin-top: 24px;
+  padding: 16px 19px;
+  border-left: 4px solid var(--teal);
+  border-radius: 0 13px 13px 0;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.note b { color: var(--ink); }
+
+/* Final call to action */
+.band {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: clamp(28px, 5vw, 54px);
+  border-radius: 26px;
+  color: var(--on-navy);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(61,183,192,.22), transparent 28%),
+    var(--navy);
+  box-shadow: var(--shadow);
+}
+.band::after {
+  content: "✳";
+  position: absolute;
+  right: 23%; top: -65px;
+  color: rgba(246,241,232,.07);
+  font-size: 230px;
+  line-height: 1;
+  transform: rotate(18deg);
+  pointer-events: none;
+}
+.band h2 { max-width: 650px; font-size: clamp(27px, 4vw, 43px); }
+.band .btn { position: relative; z-index: 1; flex: none; }
+
+/* Footer */
+.footer {
+  padding: 48px 0 38px;
+  background: #091827;
+  color: var(--navy-muted);
+}
+.footer .wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+.footer p { max-width: 560px; margin-top: 10px; font-size: 13px; line-height: 1.7; }
+.footer a { color: var(--navy-muted); font-size: 14px; line-height: 2.2; text-decoration: none; }
+.footer a:hover { color: var(--on-navy); }
+.footer b { color: var(--on-navy) !important; font-family: var(--display); }
+
+/* Scroll reveal — gracefully falls back to visible without JS */
+.js-reveal .rv {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.js-reveal .rv.in-view { opacity: 1; transform: translateY(0); }
+.js-reveal .grid .rv:nth-child(2) { transition-delay: .07s; }
+.js-reveal .grid .rv:nth-child(3) { transition-delay: .14s; }
+.js-reveal .grid .rv:nth-child(4) { transition-delay: .05s; }
+.js-reveal .grid .rv:nth-child(5) { transition-delay: .12s; }
+.js-reveal .grid .rv:nth-child(6) { transition-delay: .19s; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes underline-in { to { transform: scaleX(1); } }
+@keyframes dash-flow { to { stroke-dashoffset: -360; } }
+@keyframes float-a { 0%,100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@keyframes float-b { 0%,100% { translate: 0 0; } 50% { translate: 0 12px; } }
+@keyframes float-c { 0%,100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero { padding-block: 78px 100px; }
+  .hero > .wrap { grid-template-columns: 1fr  .85fr; gap: 24px; }
+  .collage { min-height: 340px; }
+  .g3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .g4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0,1fr)); row-gap: 22px; }
+  .steps li:nth-child(2)::after { display: none; }
+  .s { padding-block: 76px; }
+}
+@media (max-width: 650px) {
+  .wrap { padding-inline: 19px; }
+  .nav .wrap { min-height: 68px; }
+  .links { gap: 14px; }
+  .links a:not(.cta) { display: none; }
+  .links .cta { padding: 10px 13px; font-size: 12px; }
+  .brand { font-size: 21px; }
+  .brand svg { width: 28px; }
+  .hero { padding: 67px 0 82px; }
+  .hero > .wrap { grid-template-columns: 1fr; gap: 35px; }
+  .hero h1 { font-size: clamp(43px, 12vw, 62px); }
+  .hero .lead { font-size: 15.5px; }
+  .collage { min-height: 300px; width: min(460px, 100%); margin-inline: auto; }
+  .ph.a { width: 59%; height: 67%; }
+  .ph.b { width: 53%; height: 57%; }
+  .ph.c { width: 42%; height: 43%; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 18px 0; padding: 21px; margin-top: -28px; }
+  .stats > div { padding: 3px 12px; }
+  .stats > div:nth-child(2) { border-right: 0; }
+  .stats > div:nth-child(3) { padding-left: 12px; }
+  .stats b { font-size: 25px; }
+  .stats span { font-size: 11.5px; }
+  .s { padding-block: 62px; }
+  .sh { margin-bottom: 25px; }
+  .sh h2 { font-size: 33px; }
+  .sh > p:not(.eyebrow) { font-size: 15px; }
+  .g3, .g4 { grid-template-columns: 1fr; }
+  .card { padding: 22px; }
+  .steps { grid-template-columns: 1fr; gap: 15px; }
+  .steps li { padding: 10px 0 10px 67px; min-height: 70px; }
+  .steps li::before { position: absolute; left: 0; top: 8px; margin: 0; }
+  .steps li::after { display: none !important; }
+  .dest { min-height: 190px; }
+  .band { align-items: flex-start; flex-direction: column; padding: 29px 24px; }
+  .band::after { right: -30px; top: -25px; font-size: 150px; }
+  .footer .wrap { flex-direction: column; gap: 22px; }
+  .route { bottom: -55px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .js-reveal .rv { opacity: 1; transform: none; }
+}
+
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Safar Planner","description":"Budget-based trip and itinerary planner for destinations across India."}</script>
+</head><body>
+<header class="nav"><div class="wrap"><a class="brand" href="index-standalone.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#E4702B"/><path d="M26 16 7 8l3 7 8 1-8 1-3 7z" fill="#0E2238"/></svg>Safar<i>Planner</i></a><nav class="links" aria-label="Main"><a href="index-standalone.html" aria-current="page">Home</a><a href="plan-connected.html">Plan a trip</a><a href="blog/">Blog</a><a href="account.html">My account</a><a class="cta" href="plan-connected.html">Start planning</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap">
+ <div><p class="eyebrow">Your one-stop trip planner</p>
+ <h1>Every trip. Every budget. <em>One plan.</em></h1>
+ <p class="lead">Safar Planner turns “where, with whom and how much?” into a complete trip: how to get there, where to stay, what to eat and a day-by-day itinerary on a real map. Backpacking solo or taking the whole family, it plans around the money you actually have.</p>
+ <div class="actions"><a class="btn p" href="plan-connected.html">Plan a trip →</a><a class="btn g" href="blog/">Read travel guides</a></div></div>
+ <div class="collage" aria-hidden="true">
+  <div class="ph a" data-q="Jaipur Hawa Mahal" style="background-image:linear-gradient(135deg,#E4702B,#7a2d0a)"><span>Jaipur</span></div>
+  <div class="ph b" data-q="Munnar tea plantations" style="background-image:linear-gradient(135deg,#12808A,#0b3b40)"><span>Munnar</span></div>
+  <div class="ph c" data-q="Goa beach India" style="background-image:linear-gradient(135deg,#3DB7C0,#0E2238)"><span>Goa</span></div>
+ </div>
+ <svg class="route" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70Q300 -10 600 45T1200 20" fill="none" stroke="#F6F1E8" stroke-width="2" stroke-dasharray="6 12"/></svg>
+</div></section>
+<div class="wrap"><div class="stats rv"><div><b>45</b><span>destinations across India</span></div><div><b>₹0–1,00,000</b><span>budgets from shoestring to comfortable</span></div><div><b>1 to any</b><span>group size, from solo to large groups</span></div><div><b>8 steps</b><span>from search to booking links</span></div></div></div>
+
+<section class="s"><div class="wrap"><div class="sh rv"><p class="eyebrow">Why Safar Planner</p><h2>One place for every kind of traveller</h2><p>Most planners handle one trip style. Safar Planner starts from your budget and group, so the same tool works for a student with a few thousand rupees and a family planning a week away.</p></div>
+<div class="grid g3"><article class="card rv"><div class="ico" aria-hidden="true">🎒</div><h3>Budget backpacking</h3><p>Hostels, buses and street food. Set a tight total and see what fits, down to the rupee.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🧍</div><h3>Solo trips</h3><p>Travel for one, with dorm beds, shared cabs and places that are easy to enjoy alone.</p></article><article class="card rv"><div class="ico" aria-hidden="true">💑</div><h3>Couples</h3><p>Quiet stays, sunset spots and slower days, planned around your total.</p></article><article class="card rv"><div class="ico" aria-hidden="true">👨‍👩‍👧</div><h3>Family trips</h3><p>Room counts, vehicle sizes and shorter days worked out for the whole family.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🎉</div><h3>Friend groups</h3><p>Split cabs and rooms across any group size and see the cost per person.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🌄</div><h3>Weekend getaways</h3><p>Short escapes from your city, with fewer travel hours and a tidy plan.</p></article></div></div></section>
+
+<section class="s alt"><div class="wrap"><div class="sh rv"><p class="eyebrow">How it works</p><h2>From a blank page to a ready plan in minutes</h2></div>
+<ol class="steps" style="padding:0;margin:0">
+<li class="rv"><h3>Tell us the basics</h3><p>Destination, starting city, travellers, days and your total budget.</p></li>
+<li class="rv"><h3>Choose how to travel</h3><p>Compare train, bus, cab, flight and more, ranked against your budget.</p></li>
+<li class="rv"><h3>Pick places, stay and food</h3><p>Add the sights you like, then a stay and meals that fit what is left.</p></li>
+<li class="rv"><h3>Get your itinerary</h3><p>A day-by-day plan with a cost breakdown, Google Map pins and booking links.</p></li></ol></div></section>
+
+<section class="s"><div class="wrap"><div class="sh rv"><p class="eyebrow">Everything in the plan</p><h2>Built to be useful, not just pretty</h2></div><div class="grid g3"><article class="card rv"><div class="ico" aria-hidden="true">💸</div><h3>Cost breakdown you can trust</h3><p>Travel, stay, food, local transport and activities are added up against your budget. Over budget? We tell you by how much, and what to change.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🗺️</div><h3>Itinerary on a real Google Map</h3><p>Your places become numbered pins by day, with the route between them and one-tap links to open each stop in Google Maps.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🚆</div><h3>Every way to get there</h3><p>Trains, buses, shared taxis, cabs, flights and self-drive compared for your route, with booking links to the official sites.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🛏️</div><h3>Stays at every price</h3><p>From dorm beds to premium hotels, picked to match what is left after travel.</p></article><article class="card rv"><div class="ico" aria-hidden="true">🍛</div><h3>Food that is local</h3><p>Breakfast, lunch, dinner and snack ideas for each destination, with tourist-trap options marked.</p></article><article class="card rv"><div class="ico" aria-hidden="true">📄</div><h3>Take it with you</h3><p>Copy your full plan as text and keep it on your phone. Payments are never taken here: you book on the official sites.</p></article></div>
+<p class="note rv"><b>An honest note on prices.</b> Fares, room rates and entry fees shown are indicative estimates, not live quotes. We link you to the official sites to confirm and book. No payments happen on Safar Planner. Right now the planner covers destinations in India.</p></div></section>
+
+<section class="s alt"><div class="wrap"><div class="sh rv"><p class="eyebrow">Start somewhere</p><h2>Popular destinations</h2><p>Tap a destination to open the planner with it already filled in. There are 45 to choose from, and more are on the way.</p></div>
+<div class="grid g4"><a class="dest rv" href="plan-connected.html?dest=jaipur" data-q="Jaipur Hawa Mahal" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Jaipur</b><small>Rajasthan</small></div></a><a class="dest rv" href="plan-connected.html?dest=goa" data-q="Goa beach India" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Goa</b><small>Goa</small></div></a><a class="dest rv" href="plan-connected.html?dest=munnar" data-q="Munnar tea plantations" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Munnar</b><small>Kerala</small></div></a><a class="dest rv" href="plan-connected.html?dest=leh" data-q="Leh Ladakh" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Leh-Ladakh</b><small>Ladakh</small></div></a><a class="dest rv" href="plan-connected.html?dest=udaipur" data-q="Udaipur City Palace" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Udaipur</b><small>Rajasthan</small></div></a><a class="dest rv" href="plan-connected.html?dest=varanasi" data-q="Varanasi ghats" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Varanasi</b><small>Uttar Pradesh</small></div></a><a class="dest rv" href="plan-connected.html?dest=hampi" data-q="Hampi Virupaksha Temple" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Hampi</b><small>Karnataka</small></div></a><a class="dest rv" href="plan-connected.html?dest=alleppey" data-q="Alappuzha backwaters" style="background-image:linear-gradient(135deg,#12808A,#0E2238)"><div><b>Alleppey</b><small>Kerala</small></div></a></div>
+<div class="chips" style="margin-top:26px"><a class="chip" href="plan-connected.html">See all 45 destinations →</a></div></div></section>
+
+<section class="s"><div class="wrap"><div class="sh rv"><p class="eyebrow">From the blog</p><h2>Guides to help you plan better</h2></div>
+<div class="grid g3"><article class="card rv"><span class="tag">Planning</span><h3><a href="blog/budget-trip-planning-india-guide.html" style="color:inherit;text-decoration:none">How to plan a budget trip in India, step by step</a></h3><p>A simple order of decisions that keeps your total under control.</p></article>
+<article class="card rv"><span class="tag">Itinerary</span><h3><a href="blog/jaipur-3-day-budget-itinerary.html" style="color:inherit;text-decoration:none">A 3-day Jaipur itinerary that respects your budget</a></h3><p>Forts early, bazaars late, and where to save.</p></article>
+<article class="card rv" style="display:grid;align-content:center;text-align:center"><h3>More guides</h3><p>Destination plans, budget tips and trip checklists.</p><p style="margin-top:14px"><a class="btn t" href="blog/">Visit the blog</a></p></article></div></div></section>
+
+<section class="s" style="padding-top:0"><div class="wrap"><div class="band rv"><h2>Ready to see what your budget can do?</h2><a class="btn p" href="plan-connected.html">Plan a trip →</a></div></div></section>
+</main>
+<footer class="footer"><div class="wrap"><div><b style="color:var(--on-navy);font-size:18px">Safar Planner</b><p>Plan any trip around the money you have. Photos from Wikipedia and Wikimedia Commons, licences vary by image. Maps by Google.</p></div><div><a href="plan-connected.html">Plan a trip</a><br><a href="blog/">Blog</a><br><a href="blog/feed.xml">RSS feed</a></div></div></footer>
+
+<script>
+(() => {
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js-reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+  document.querySelectorAll('.rv').forEach((element) => observer.observe(element));
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script>
+<script>
+(async()=>{
+  try{
+    if(!window.supabaseClient)return;
+    const {data,error}=await window.supabaseClient.from('destinations').select('name,slug,state,description,image_url,is_published').eq('is_published',true);
+    if(error)throw error;
+    const grid=document.querySelector('.s.alt .grid.g4');
+    if(!grid)return;
+    const existing=new Set([...grid.querySelectorAll('.dest')].map(a=>(a.textContent||'').trim().split(/\s+/)[0].toLowerCase()));
+    (data||[]).forEach(d=>{
+      const name=String(d.name||'').trim();
+      if(!name||existing.has(name.toLowerCase()))return;
+      const slug=(d.slug||name).toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      const a=document.createElement('a');a.className='dest rv';a.href='plan-connected.html?dest='+encodeURIComponent(slug);
+      if(d.image_url){a.style.backgroundImage=`linear-gradient(180deg,rgba(14,34,56,.08),rgba(14,34,56,.82)),url("${String(d.image_url).replace(/["\\]/g,'')}")`;}
+      else a.style.backgroundImage='linear-gradient(135deg,#12808A,#0E2238)';
+      const content=document.createElement('div'),b=document.createElement('b'),small=document.createElement('small');
+      b.textContent=name;small.textContent=d.state||'India';content.append(b,small);a.append(content);grid.append(a);existing.add(name.toLowerCase());
+    });
+  }catch(e){console.warn('Could not sync homepage destinations:',e.message||e);}
+})();
+</script>
+
+<script src="assets/photos.js"></script><script src="assets/site.js"></script>
+</body></html>

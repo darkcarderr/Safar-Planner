@@ -1,0 +1,1070 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Plan a Trip · Safar Planner</title>
+<meta name="description" content="Plan a trip around your budget. Enter where, how many people and how much you can spend, and get travel, stay, food and a day-by-day itinerary on a real Google Map.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: a boarding-pass journey. Navy departure band on top, warm working surface below, fares and days drawn as perforated tickets. */
+:root{
+  --bg:#F6F1E8;--surface:#FFFCF6;--surface2:#EFE8DA;--ink:#0E2238;--muted:#52616F;--line:#DDD3C0;
+  --teal:#12808A;--teal-d:#0B5B63;--on-teal:#FFFFFF;--orange:#E4702B;--on-orange:#1B0F05;--orange-soft:#FBE6D6;
+  --navy:#0E2238;--on-navy:#F6F1E8;--navy-muted:#A9B8C8;
+  --ok:#17704A;--ok-bg:#DDF1E8;--warn:#7D5209;--warn-bg:#F7EBCF;--bad:#A32D20;--bad-bg:#F7DDD8;
+  --shadow:0 1px 2px rgba(14,34,56,.06),0 10px 28px rgba(14,34,56,.09);
+  --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --f-body:'Instrument Sans','Segoe UI',system-ui,sans-serif;
+  --f-mono:'DM Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1726;--surface:#102338;--surface2:#16304A;--ink:#F1EBDD;--muted:#9FB1C3;--line:#27425D;
+  --teal:#3DB7C0;--teal-d:#7CD3DA;--on-teal:#06222A;--orange:#F28C4E;--on-orange:#1B0F05;--orange-soft:#3A2619;
+  --navy:#07111E;--on-navy:#F1EBDD;--navy-muted:#8FA3B8;
+  --ok:#4CC38A;--ok-bg:#12372A;--warn:#E3B04B;--warn-bg:#3A3015;--bad:#F0735F;--bad-bg:#3E1D18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1726;--surface:#102338;--surface2:#16304A;--ink:#F1EBDD;--muted:#9FB1C3;--line:#27425D;
+  --teal:#3DB7C0;--teal-d:#7CD3DA;--on-teal:#06222A;--orange:#F28C4E;--on-orange:#1B0F05;--orange-soft:#3A2619;
+  --navy:#07111E;--on-navy:#F1EBDD;--navy-muted:#8FA3B8;
+  --ok:#4CC38A;--ok-bg:#12372A;--warn:#E3B04B;--warn-bg:#3A3015;--bad:#F0735F;--bad-bg:#3E1D18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+body.hasbar #app{padding-bottom:168px}
+h1,h2,h3,h4{font-family:var(--f-display);margin:0;line-height:1.08;letter-spacing:-.015em;text-wrap:balance}
+p{margin:0}
+a{color:var(--teal-d);text-underline-offset:3px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:6px}
+.wrap{width:min(1120px,100%);margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)}.small{font-size:13px}.mono{font-family:var(--f-mono)}
+.stack{display:grid;gap:16px}
+
+/* header + stepper */
+.top{background:var(--navy);color:var(--on-navy)}
+.top .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px 8px}
+.brand{font:700 22px var(--f-display);letter-spacing:-.02em;color:var(--on-navy);text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand svg{width:26px;height:26px}
+.brand i{font-style:normal;font-weight:500;color:var(--navy-muted)}
+.tagline{font-size:12px;color:var(--navy-muted);letter-spacing:.08em;text-transform:uppercase}
+.steps{display:flex;gap:4px;overflow-x:auto;padding-block:6px 12px;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.st{flex:none;background:transparent;border:0;color:var(--navy-muted);padding:8px 12px;border-radius:99px;font:600 13px var(--f-body);cursor:default;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.st .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
+.st.done{color:var(--on-navy);cursor:pointer}.st.done .dot{background:var(--teal);opacity:1}
+.st.on{background:var(--on-navy);color:var(--navy)}.st.on .dot{background:var(--orange);opacity:1}
+
+/* hero + search */
+.hero{background:var(--navy);color:var(--on-navy);padding-block:26px 84px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(30px,5.2vw,52px);max-width:15em}
+.hero p{color:var(--navy-muted);max-width:34em;margin-top:12px}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.arc{position:absolute;right:-40px;top:10px;width:min(520px,70%);opacity:.35;pointer-events:none}
+.search{margin-top:-56px;position:relative;z-index:2;padding:22px;display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{position:relative;min-width:0}
+.field>label,.lab{display:block;font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;min-height:48px}
+.inp:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 25%,transparent)}
+.err{color:var(--bad);font-size:13px;min-height:0;margin-top:4px}
+.err:empty{display:none}
+.dd{position:absolute;left:0;right:0;top:calc(100% - 2px);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);z-index:30;max-height:380px;overflow:auto;padding:8px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:8px;cursor:pointer}
+.opt:hover,.opt:focus-visible{background:var(--surface2)}
+.opt b{display:block;font-weight:600}.opt small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+.th{flex:none;width:56px;height:44px;border-radius:10px;background-size:cover;background-position:center}
+.th.plain{display:grid;place-items:center;background:var(--surface2);font-size:20px;color:var(--teal-d)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:4px 4px 10px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 12px;font:600 12.5px var(--f-body);cursor:pointer}
+.chip.on{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.stp{display:flex;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);overflow:hidden;min-height:48px}
+.stp button{flex:none;width:48px;border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--teal-d)}
+.stp button:hover{background:var(--surface2)}
+.stp input{flex:1;min-width:0;border:0;background:transparent;text-align:center;font:600 18px var(--f-mono);-moz-appearance:textfield}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stp input:focus{outline:none}
+.hint{font-size:13px;color:var(--muted);margin-top:6px}
+.budget{display:grid;gap:12px}
+.bhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.bval{font:700 clamp(30px,6vw,44px) var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.bin{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);padding-left:12px;min-height:44px;width:190px}
+.bin input{border:0;background:transparent;width:100%;padding:8px 10px 8px 4px;font:500 16px var(--f-mono);min-width:0}
+.bin input:focus{outline:none}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--teal) var(--p,15%),var(--line) var(--p,15%));outline-offset:8px;margin:10px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--surface);border:4px solid var(--orange);box-shadow:var(--shadow);cursor:grab}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--surface);border:4px solid var(--orange);cursor:grab}
+.ticks{display:flex;justify-content:space-between;font:500 11px var(--f-mono);color:var(--muted)}
+.go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:14px;background:var(--orange);color:var(--on-orange);font:800 16px var(--f-display);letter-spacing:.06em;padding:16px 20px;cursor:pointer;box-shadow:0 6px 0 color-mix(in srgb,var(--orange) 55%,#000);transition:transform .12s,box-shadow .12s}
+.go:hover{transform:translateY(2px);box-shadow:0 4px 0 color-mix(in srgb,var(--orange) 55%,#000)}
+.go svg{width:22px;height:22px}
+
+/* generic */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 14px var(--f-body);padding:11px 18px;border-radius:12px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;min-height:44px}
+.btn.primary{background:var(--orange);color:var(--on-orange)}
+.btn.teal{background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--teal)}
+.btn.sm{padding:7px 12px;min-height:36px;font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font:600 12px var(--f-body);white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.info{background:var(--surface2);color:var(--muted)}
+.sh{padding-block:28px 18px}
+.sh h2{font-size:clamp(26px,4vw,38px)}
+.sh .sub{color:var(--muted);margin-top:8px;max-width:48em}
+.note{display:flex;gap:10px;background:var(--surface2);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.note b{color:var(--ink)}
+.banner{border-radius:16px;padding:16px 18px;margin-bottom:16px;background:var(--bad-bg);color:var(--ink);border:1.5px solid var(--bad)}
+.banner h3{font-size:18px;color:var(--bad);margin-bottom:6px}
+.banner ul{margin:8px 0 12px;padding-left:18px}
+.banner li{margin:2px 0}
+
+/* tickets */
+.ticket{display:grid;grid-template-columns:1fr 240px;background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);position:relative}
+.ticket.sel{border-color:var(--teal)}
+.tmain{padding:20px 22px;display:grid;gap:10px;align-content:start;min-width:0}
+.tt{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mode{font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.best{background:var(--orange);color:var(--on-orange);font:800 11px var(--f-body);letter-spacing:.1em;padding:3px 9px;border-radius:6px}
+.tmain h3{font-size:22px}
+.route{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:15px;min-width:0}
+.route b{font-weight:600}
+.route .dash{flex:1;min-width:24px;border-top:2px dashed var(--line);position:relative}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;margin:0}
+.kv dt{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kv dd{margin:2px 0 0;font-weight:500}
+.stub{border-left:2px dashed var(--line);padding:20px;display:grid;gap:8px;align-content:start;position:relative}
+.stub::before,.stub::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:var(--bg);left:-11px}
+.stub::before{top:-11px}.stub::after{bottom:-11px}
+.stub .lbl{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.price{font:700 30px var(--f-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+
+/* place / eat cards */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}
+.tab{flex:none;border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 14px;font:600 13px var(--f-body);cursor:pointer}
+.tab.on{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.pc{display:flex;flex-direction:column;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}
+.pc.on{border-color:var(--teal);box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 30%,transparent)}
+.pc .ph{height:116px;background-size:cover;background-position:center;position:relative}
+.pc .ph .c{position:absolute;left:10px;top:10px;background:rgba(7,17,30,.72);color:#F6F1E8;font:600 11px var(--f-body);padding:3px 9px;border-radius:99px}
+.pc .ph .r{position:absolute;right:10px;top:10px;background:var(--orange);color:var(--on-orange);font:800 10.5px var(--f-body);letter-spacing:.08em;padding:3px 8px;border-radius:6px}
+.pc .bd{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pc h3{font-size:18px}
+.pc .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pc .act{margin-top:auto;display:flex;gap:8px;align-items:center;justify-content:space-between;padding-top:6px}
+.sum{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.slotH{font:700 18px var(--f-display);margin:24px 0 12px}
+.empty{padding:28px;text-align:center;border:2px dashed var(--line);border-radius:18px;color:var(--muted);display:grid;gap:12px;justify-items:center}
+
+/* itinerary */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px;align-items:start}
+.cost{padding:20px;display:grid;gap:10px}
+.cr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+.cr:last-of-type{border-bottom:0}
+.cr .v{font:500 15px var(--f-mono);font-variant-numeric:tabular-nums}
+.cr .n{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.bar1{grid-column:1/-1;height:4px;border-radius:4px;background:var(--surface2);overflow:hidden}
+.bar1 i{display:block;height:100%;background:var(--teal)}
+.tot{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding-top:12px}
+.tot div{background:var(--bg);border-radius:12px;padding:10px 12px}
+.tot dt{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tot dd{margin:2px 0 0;font:700 20px var(--f-display);font-variant-numeric:tabular-nums}
+.map{padding:12px}
+.map svg{display:block;width:100%;height:auto;border-radius:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.pin{cursor:pointer}
+.pin:focus-visible circle{stroke:var(--orange);stroke-width:3}
+#pininfo{margin-top:10px;font-size:14px;min-height:22px}
+.day{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;background:var(--navy);color:var(--on-navy)}
+.dh h3{font-size:20px}
+.dh .pill{background:var(--on-navy);color:var(--navy)}
+.dr{display:grid;grid-template-columns:104px minmax(0,1fr);gap:4px 16px;padding:14px 20px;border-top:1px solid var(--line)}
+.dr:first-of-type{border-top:0}
+.dr .t{font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.dr ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.hop{font-size:12.5px;color:var(--muted)}
+.tips{display:grid;gap:8px;margin:0;padding-left:18px}
+details summary{cursor:pointer;font-weight:600;padding:8px 0}
+textarea.tx{width:100%;min-height:220px;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px;font:13px/1.5 var(--f-mono)}
+.bk{padding:18px 20px;display:grid;gap:10px}
+.bk h3{font-size:19px}
+.bk ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.bk li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px}
+.bk li:last-child{border-bottom:0}
+.okbox{background:var(--ok-bg);border:1.5px solid var(--ok);border-radius:16px;padding:16px 18px}
+
+/* budget bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(14,34,56,.08);padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.bar .in{display:grid;grid-template-columns:1fr auto;gap:10px 18px;align-items:center}
+.nums{display:flex;gap:6px 22px;flex-wrap:wrap}
+.nums div{min-width:0}
+.nums dt{font:600 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.nums dd{margin:0;font:600 17px var(--f-mono);font-variant-numeric:tabular-nums}
+.nums dd.bad{color:var(--bad)}.nums dd.ok{color:var(--ok)}
+.meter{grid-column:1/-1;height:6px;border-radius:6px;background:var(--surface2);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--teal);transition:width .25s}
+.meter.over i{background:var(--bad)}
+.nav{display:flex;gap:8px}
+
+/* flight overlay */
+.fly{position:fixed;inset:0;background:var(--navy);color:var(--on-navy);z-index:60;display:grid;place-items:center;text-align:center;padding:24px;overflow:hidden}
+.fly h2{font-size:clamp(24px,4vw,34px)}
+.fly p{color:var(--navy-muted);margin-top:8px}
+.plane{position:absolute;top:30%;left:0;width:76px;animation:fly 1.9s cubic-bezier(.5,0,.3,1) forwards}
+.trail{position:absolute;top:calc(30% + 36px);left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--on-navy) 0 10px,transparent 10px 22px);opacity:.28}
+@keyframes fly{from{transform:translateX(-100px)}to{transform:translateX(calc(100vw + 30px))}}
+
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+@media (max-width:700px){
+  .ticket{grid-template-columns:1fr}
+  .stub{border-left:0;border-top:2px dashed var(--line)}
+  .stub::before{top:-11px;left:-11px}.stub::after{top:-11px;bottom:auto;left:auto;right:-11px}
+  .dr{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .g2{grid-template-columns:1fr}
+  .search{padding:16px}
+  .bar .in{grid-template-columns:1fr}
+  .nav .btn{flex:1}
+  body.hasbar #app{padding-bottom:210px}
+  .tagline{display:none}
+}
+@media (prefers-reduced-motion:reduce){.plane{animation-duration:.01s}.go{transition:none}.meter i{transition:none}}
+
+/* ---- site nav, animation, photos, map ---- */
+.sitenav{display:flex;gap:4px;align-items:center}
+.sitenav a{color:var(--navy-muted);text-decoration:none;font:600 14px var(--f-body);padding:8px 14px;border-radius:99px;transition:background .2s,color .2s}
+.sitenav a:hover{color:var(--on-navy);background:rgba(255,255,255,.1)}
+.sitenav a[aria-current]{color:var(--navy);background:var(--on-navy)}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:0 0}100%{background-position:200% 0}}
+.hero .eyebrow,.hero h1,.hero p,.herochips{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.08s}.hero p{animation-delay:.18s}.herochips{animation-delay:.28s}
+.hero h1{background:linear-gradient(100deg,var(--on-navy) 30%,#F7B27F 50%,var(--on-navy) 70%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .8s .08s cubic-bezier(.2,.7,.2,1) both,shimmer 6s 1s linear infinite}
+.arc{opacity:.55}.arc path.trail{stroke-dasharray:6 10}
+.herochips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.herochips span{border:1px solid rgba(246,241,232,.28);color:var(--on-navy);border-radius:99px;padding:5px 13px;font-size:13px}
+.search{animation:rise .9s .3s cubic-bezier(.2,.7,.2,1) both}
+#app>div>.stack>*,#app .grid>*,#app .pgrid>*,#app>div>.two>*{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+#app .grid>:nth-child(2),#app .pgrid>:nth-child(2),#app .stack>:nth-child(2){animation-delay:.05s}
+#app .grid>:nth-child(3),#app .pgrid>:nth-child(3),#app .stack>:nth-child(3){animation-delay:.1s}
+#app .grid>:nth-child(4),#app .pgrid>:nth-child(4),#app .stack>:nth-child(4){animation-delay:.15s}
+#app .grid>:nth-child(n+5),#app .pgrid>:nth-child(n+5),#app .stack>:nth-child(n+5){animation-delay:.2s}
+.pc,.ticket,.pcard{transition:transform .25s,box-shadow .25s,border-color .25s}
+.pc:hover,.ticket:hover,.pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.pc .ph,.th{transition:background-size .6s}
+.pop{padding-block:56px 40px}.pop h2{font-size:clamp(24px,3.6vw,36px)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:14px;margin-top:22px}
+.pcard{display:flex;flex-direction:column;padding:0;border:1.5px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface);cursor:pointer;text-align:left;min-width:0}
+.pw{display:block;overflow:hidden;height:124px}
+.pimg{display:block;height:100%;background-size:cover;background-position:center;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.pcard:hover .pimg{transform:scale(1.08)}
+.pbody{padding:10px 12px 13px;display:grid;gap:1px}.pbody b{font:700 16px var(--f-display)}.pbody small{color:var(--muted)}
+.gmap{height:min(460px,62vh);min-height:320px;border-radius:14px;overflow:hidden;background:var(--surface2)}
+.gfallback code{background:var(--surface2);padding:1px 6px;border-radius:6px}
+.sfoot{background:var(--navy);color:var(--navy-muted);padding:26px 0 34px;font-size:13px;margin-top:40px}
+.sfoot .wrap{display:grid;gap:8px}.sfoot a{color:var(--on-navy)}
+@media (max-width:560px){.sitenav a{padding:6px 10px;font-size:13px}.brand i{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hero h1{color:var(--on-navy);-webkit-text-fill-color:currentColor}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="row">
+      <a class="brand" href="index-standalone.html"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#E4702B"/><path d="M26 16 7 8l3 7 8 1-8 1-3 7z" fill="#0E2238"/></svg>Safar<i>Planner</i></a>
+      <nav class="sitenav" aria-label="Site"><a href="index-standalone.html">Home</a><a href="plan-connected.html" aria-current="page">Plan a trip</a><a href="blog/">Blog</a><a href="account.html">My account</a></nav>
+    </div>
+    <nav class="steps" id="steps" aria-label="Trip steps"></nav>
+  </div>
+</header>
+<main id="app"></main>
+<footer class="sfoot"><div class="wrap"><p>© Safar Planner · Prices and times are indicative estimates, not live quotes. Photos from Wikipedia and Wikimedia Commons; licences vary by image. Maps by Google.</p><p><a href="index-standalone.html">Home</a> · <a href="blog/">Blog</a> · <a href="blog/feed.xml">RSS</a></p></div></footer>
+<div class="bar" id="bar" hidden></div>
+<div class="fly" id="fly" hidden role="status" aria-live="polite">
+  <div class="trail"></div>
+  <svg class="plane" viewBox="0 0 64 40" aria-hidden="true"><path d="M62 20 8 3l6 14 22 3-22 3L8 37z" fill="#E4702B"/><path d="M14 17l22 3-22 3z" fill="#F6F1E8" opacity=".5"/></svg>
+  <div><h2>Finding your perfect journey...</h2><p id="flyroute"></p></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script>
+<script src="assets/photos.js"></script>
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=v=>(v<0?'-':'')+'₹'+Math.abs(Math.round(v)).toLocaleString('en-IN');
+const rad=x=>x*Math.PI/180;
+const hav=(a,b,c,d)=>{const R=6371,x=Math.sin(rad(c-a)/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(rad(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(x))};
+const r10=v=>Math.round(v/10)*10;
+const fmtH=h=>{h=Math.max(0.5,h);const m=Math.round(h*60/15)*15;return Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'')};
+const gm=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const enc=encodeURIComponent;
+const MAXB=100000;
+
+/* ---------- picture-free "postcards" (no external images are allowed on this page) ---------- */
+function art(h,k){
+  const g={
+    mountain:'<path d="M0 110 60 48 96 86 142 28 200 110Z" fill="rgba(255,255,255,.34)"/><path d="M0 110 84 70 122 96 200 54V110Z" fill="rgba(0,0,0,.2)"/>',
+    wave:'<path d="M0 70q25-18 50 0t50 0 50 0 50 0v40H0z" fill="rgba(255,255,255,.32)"/><path d="M0 88q25-16 50 0t50 0 50 0 50 0v22H0z" fill="rgba(0,0,0,.2)"/>',
+    dome:'<path d="M40 110V70q0-34 60-34t60 34v40z" fill="rgba(255,255,255,.34)"/><rect x="96" y="22" width="8" height="16" fill="rgba(255,255,255,.5)"/><rect x="0" y="96" width="200" height="14" fill="rgba(0,0,0,.2)"/>',
+    bowl:'<path d="M50 62h100q0 44-50 44T50 62z" fill="rgba(255,255,255,.4)"/><path d="M78 52q-6-12 0-22M100 50q-6-12 0-24M122 52q-6-12 0-22" stroke="rgba(255,255,255,.6)" stroke-width="4" fill="none" stroke-linecap="round"/>',
+    compass:'<circle cx="100" cy="62" r="30" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="4"/><path d="M100 36l9 26-9 26-9-26z" fill="rgba(255,255,255,.5)"/>',
+    lantern:'<rect x="80" y="30" width="40" height="56" rx="14" fill="rgba(255,255,255,.4)"/><rect x="92" y="18" width="16" height="12" fill="rgba(255,255,255,.5)"/><rect x="92" y="86" width="16" height="12" fill="rgba(255,255,255,.5)"/>',
+    bag:'<rect x="62" y="44" width="76" height="56" rx="8" fill="rgba(255,255,255,.4)"/><path d="M82 44q0-26 18-26t18 26" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="5"/>'
+  };
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl('+h+' 55% 34%)"/><stop offset="1" stop-color="hsl('+((h+45)%360)+' 70% 60%)"/></linearGradient></defs><rect width="200" height="110" fill="url(#g)"/><circle cx="156" cy="28" r="13" fill="rgba(255,255,255,.55)"/>'+(g[k]||g.compass)+'</svg>';
+  return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"')";
+}
+
+/* ---------- data: origins ---------- */
+const ORIGINS=[['Delhi',28.61,77.21],['Mumbai',19.08,72.88],['Bengaluru',12.97,77.59],['Chennai',13.08,80.27],['Kolkata',22.57,88.36],['Hyderabad',17.39,78.49],['Pune',18.52,73.86],['Ahmedabad',23.02,72.57],['Jaipur',26.91,75.79],['Lucknow',26.85,80.95],['Chandigarh',30.73,76.78],['Kochi',9.93,76.27],['Bhopal',23.26,77.41],['Indore',22.72,75.86],['Patna',25.59,85.14],['Nagpur',21.15,79.09],['Gurugram',28.46,77.03],['Noida',28.54,77.39],['Dehradun',30.32,78.03],['Varanasi',25.32,83.0],['Udaipur',24.58,73.68],['Amritsar',31.63,74.87],['Surat',21.17,72.83],['Coimbatore',11.02,76.96],['Visakhapatnam',17.69,83.22],['Thiruvananthapuram',8.52,76.94],['Guwahati',26.14,91.74],['Bhubaneswar',20.3,85.82],['Ranchi',23.34,85.31],['Raipur',21.25,81.63],['Kanpur',26.45,80.35],['Agra',27.18,78.01],['Mysuru',12.3,76.64],['Madurai',9.93,78.12],['Ludhiana',30.9,75.86],['Shimla',31.1,77.17],['Jodhpur',26.24,73.02],['Vadodara',22.31,73.18]];
+const ALIAS={bangalore:'bengaluru',bombay:'mumbai',calcutta:'kolkata',madras:'chennai',gurgaon:'gurugram',trivandrum:'thiruvananthapuram',vizag:'visakhapatnam',mysore:'mysuru','new delhi':'delhi'};
+const findOrigin=t=>{t=t.trim().toLowerCase();t=ALIAS[t]||t;const o=ORIGINS.find(x=>x[0].toLowerCase()===t);return o?{name:o[0],lat:o[1],lng:o[2]}:null};
+
+/* ---------- data: destinations ---------- */
+const CAT={F:'Famous attractions',H:'Hidden gems',N:'Nature & adventure',L:'Local experiences',C:'Culture & history',S:'Food & shopping'};
+const CATH={F:20,H:165,N:140,L:335,C:35,S:8};
+const CATK={F:'dome',H:'compass',N:'mountain',L:'lantern',C:'dome',S:'bag'};
+const GRP=[['visited','Most visited'],['hidden','Hidden gems'],['seasonal','Seasonal'],['trending','Trending'],['weekend','Weekend getaways']];
+const P=(c,n,d,f,h,la,lo,s,x)=>Object.assign({cat:c,name:n,desc:d,fee:f,hrs:h,lat:la,lng:lo,slot:s||''},x||{});
+const E=(s,n,c,cost,where,tourist)=>({slot:s,name:n,cuis:c,cost,where,tourist:!!tourist});
+const GENTIPS=['All prices here are indicative. Confirm fares, entry fees and opening hours before you pay.','Carry photo ID for every traveller and some cash for small shops.','Book trains and buses early for weekends and holidays.'];
+const L=(id,name,state,lat,lng,tags,blurb,hue,k,rail,air,leg,ci)=>({id,name,state,lat,lng,tags,blurb,hue,k,rail,air,leg,ci,cur:false});
+
+const D=[
+{id:'jaipur',name:'Jaipur',state:'Rajasthan',lat:26.92,lng:75.82,tags:['visited','seasonal','weekend'],blurb:'Forts, bazaars and palaces. Winter is the comfortable season.',hue:20,k:'dome',rail:'direct',air:'direct',leg:{c:0,h:0},ci:1,cur:true,
+ areas:'Bani Park or the MI Road side, close to the railway station',
+ tips:['Forts get hot by midday even in winter. Start with Amber early.','Agree the auto fare before you ride, or use a metered or app cab.','Many bazaar shops close one day a week. Ask your host which day.'],
+ places:[
+  P('C','Amber Fort','Hilltop fort-palace with mirrored halls and long ramparts. Go early to beat the crowds and the heat.',100,3,26.985,75.851,'m'),
+  P('F','Hawa Mahal','Pink sandstone façade in the old city. The best photos come from the cafés across the road.',50,1,26.924,75.827,'m'),
+  P('C','City Palace','Palace complex and museum, in the heart of the old city.',200,2,26.926,75.824,'a'),
+  P('C','Jantar Mantar','Open-air astronomical instruments, a short walk from the City Palace.',50,1,26.925,75.825,'a'),
+  P('N','Nahargarh Fort at sunset','Ridge-top fort with a wide view over the city at dusk.',50,2,26.937,75.815,'e'),
+  P('H','Panna Meena ka Kund','Geometric stepwell near Amber. Quiet outside peak hours.',0,0.75,26.9875,75.8532,'m'),
+  P('F','Jal Mahal viewpoint','The lake palace seen from the roadside promenade. A quick stop.',0,0.5,26.9535,75.8466,'a'),
+  P('H','Galtaji Temple complex','Temple complex in a gorge. Watch your belongings around the monkeys.',0,1.5,26.9186,75.869,'a'),
+  P('S','Johari and Bapu Bazaars','Jewellery, textiles, juttis and snacks. Liveliest in the evening.',0,2,26.9202,75.8265,'e'),
+  P('L','Block-printing visit at Sanganer','See hand-block printing at work. Paid workshops are optional.',300,2,26.8195,75.7965,'a',{act:1})],
+ eats:[
+  E('b','Pyaaz kachori at Rawat Mishthan Bhandar','Rajasthani',90,'Rawat Mishthan Bhandar Jaipur'),
+  E('b','Poha, jalebi and chai at a lane stall','Street breakfast',60,'breakfast stalls near Johari Bazaar Jaipur'),
+  E('l','Dal-baati-churma thali at a local dhaba','Rajasthani',250,'dal baati churma thali Jaipur'),
+  E('l','Veg thali at Laxmi Misthan Bhandar (LMB)','Rajasthani',350,'Laxmi Misthan Bhandar Jaipur',1),
+  E('d','Family-run Rajasthani thali in Bani Park','Rajasthani',300,'Rajasthani thali Bani Park Jaipur'),
+  E('s','Lassi at Lassiwala on MI Road','Drinks',70,'Lassiwala MI Road Jaipur'),
+  E('s','Chaat and kulfi around Bapu Bazaar','Street food',100,'chaat Bapu Bazaar Jaipur')]},
+{id:'goa',name:'Goa',state:'Goa',lat:15.5,lng:73.83,tags:['visited','trending','seasonal'],blurb:'Beaches, forts and old churches. The dry season runs through winter.',hue:195,k:'wave',rail:'direct',air:'direct',leg:{c:0,h:0},ci:1.3,cur:true,
+ areas:'Calangute, Anjuna or Panjim. Palolem if you want the quieter south',
+ tips:['Rent a scooter only with a valid licence, and wear a helmet.','Beach shacks on the main beaches charge tourist prices. Inland family restaurants cost less.','Swim only where lifeguards are on duty.'],
+ places:[
+  P('N','Baga and Calangute beaches','Busy, lively beaches. Go early for space.',0,2,15.5553,73.7517,'m'),
+  P('C','Basilica of Bom Jesus, Old Goa','Baroque church and UNESCO site. Dress modestly.',0,1.5,15.5009,73.9116,'m'),
+  P('F','Fort Aguada','Portuguese-era fort and lighthouse above the sea.',0,1.5,15.4925,73.7737,'a'),
+  P('N','Chapora Fort at sunset','Hilltop ruins with a wide coastal view.',0,1.5,15.605,73.7367,'e'),
+  P('H','Fontainhas, Panjim','Old Latin Quarter with painted houses and small chapels.',0,1.5,15.4958,73.8325,'m'),
+  P('N','Palolem Beach','Calmer south Goa beach. A long ride from the north.',0,3,15.01,74.0232,'a'),
+  P('N','Dudhsagar Falls','Tiered waterfall reached by jeep. The fee is a shared jeep ride.',600,5,15.3144,74.3143,'m',{act:1}),
+  P('S','Anjuna flea market','Weekly market. Check which day it runs.',0,2,15.5733,73.74,'e'),
+  P('H','Divar Island','Short ferry from Old Goa to a quiet village island.',0,3,15.5333,73.8833,'a'),
+  P('H','Cabo de Rama Fort','Quiet clifftop fort in the south.',0,1.5,15.0889,73.9242,'e'),
+  P('L','Mapusa market','Local produce and spices, busiest on Fridays.',0,1.5,15.5894,73.8083,'m'),
+  P('N','Water sports at Baga','Parasailing, banana boat and jet-ski packages.',1500,2,15.556,73.751,'a',{act:1})],
+ eats:[
+  E('b','Pav-bhaji or poi and tea at a Panjim bakery','Goan breakfast',100,'bakery breakfast Panjim'),
+  E('l','Fish-curry rice at a local Goan mess','Goan',220,'fish curry rice thali Panjim'),
+  E('l','Beach-shack seafood lunch','Seafood',500,'beach shack Baga Goa',1),
+  E('d','Xacuti or cafreal at a family restaurant in Assagao','Goan',350,'Goan family restaurant Assagao'),
+  E('s','Ros omelette and pav stalls','Street food',90,'ros omelette Mapusa'),
+  E('s','Bebinca and Goan sweets in Panjim','Sweets',80,'bebinca Panjim')]},
+{id:'manali',name:'Manali',state:'Himachal Pradesh',lat:32.24,lng:77.19,tags:['visited','trending','weekend'],blurb:'Pine valleys, cafés and snow views. Pack warm layers in winter.',hue:210,k:'mountain',rail:'near',air:'near',leg:{c:700,h:7},ci:1.1,cur:true,
+ areas:'Old Manali for cafés and a laid-back feel, or near Mall Road for convenience',
+ tips:['Mountain roads are slow. Add buffer time to every transfer.','Carry warm layers even on sunny days.','Check road and weather status before day trips, especially in winter.'],
+ places:[
+  P('C','Hadimba Temple','Wooden temple in a cedar forest.',0,1,32.248,77.18,'m'),
+  P('S','Mall Road and Tibetan market','Shops, cafés and street food. Liveliest at dusk.',0,1.5,32.2432,77.1892,'e'),
+  P('N','Solang Valley','Meadows and ropeway. The fee is a typical ropeway or activity ticket.',1000,3.5,32.316,77.156,'m',{act:1}),
+  P('H','Old Manali cafés and lanes','Riverside lanes and small cafés.',0,2,32.254,77.177,'a'),
+  P('C','Vashisht temple and hot springs','Village temple with a hot-spring bathing area.',0,1.5,32.265,77.19,'a'),
+  P('N','Jogini Waterfall walk','Forest walk to a waterfall above Vashisht.',0,3,32.2735,77.187,'m'),
+  P('C','Gadhan Thekchhokling Gompa','Tibetan monastery on Mall Road.',0,0.75,32.2413,77.1869,'a'),
+  P('H','Naggar Castle and Roerich Gallery','Quiet hill village with a stone castle. About 20 km away.',50,3,32.1181,77.1727,'m')],
+ eats:[
+  E('b','Siddu with ghee at an Old Manali eatery','Himachali',120,'siddu Old Manali'),
+  E('l','Himachali dham or thali at a local dhaba','Himachali',200,'Himachali thali Manali'),
+  E('l','Thukpa and momos at the Tibetan market','Tibetan',150,'thukpa momos Manali'),
+  E('d','Dal-rajma-chawal at a roadside dhaba','North Indian',180,'dhaba Manali'),
+  E('d','River trout at a riverside restaurant','Seafood',500,'trout restaurant Manali',1),
+  E('s','Hot momos on Mall Road','Street food',100,'momos Mall Road Manali')]},
+{id:'rishikesh',name:'Rishikesh',state:'Uttarakhand',lat:30.0869,lng:78.2676,tags:['weekend','trending'],blurb:'Ganga ghats, yoga and rafting. Easy to reach for a short break.',hue:150,k:'wave',rail:'direct',air:'near',leg:{c:400,h:1.5},ci:0.9,cur:true,
+ areas:'Tapovan for cafés, or near Laxman Jhula for a riverside stay',
+ tips:['Rafting runs only in the open season. Confirm it is operating.','Dress modestly near ghats and ashrams.','The main riverside area is largely vegetarian and alcohol-free.'],
+ places:[
+  P('F','Laxman Jhula and Ram Jhula','Suspension footbridges over the Ganga, with temples and shops either side.',0,1.5,30.1273,78.3279,'m'),
+  P('C','Triveni Ghat evening aarti','Evening Ganga aarti by the river.',0,1.5,30.1006,78.2987,'e'),
+  P('C','Beatles Ashram','Abandoned ashram with murals, in the forest above the river.',150,1.5,30.113,78.3231,'a'),
+  P('N','River rafting, Shivpuri stretch','Half-day rafting. Season-dependent. Fee is an indicative group price.',800,3.5,30.1393,78.4044,'m',{act:1}),
+  P('N','Neer Garh Waterfall','Forest walk and cascades near Laxman Jhula.',0,2,30.1244,78.3318,'a'),
+  P('H','Kunjapuri Devi Temple sunrise','Hilltop temple with Himalayan views at dawn.',0,3,30.1887,78.3126,'m'),
+  P('C','Parmarth Niketan evening aarti','Large riverside ashram with a nightly aarti.',0,1.5,30.1214,78.3084,'e'),
+  P('L','Drop-in yoga or meditation class','A single session at an ashram or studio.',300,1.5,30.12,78.3,'m',{act:1}),
+  P('S','Tapovan cafés and shops','Cafés, bookshops and handicrafts.',0,2,30.133,78.328,'a')],
+ eats:[
+  E('b','Aloo-puri breakfast at Chotiwala','North Indian',120,'Chotiwala Rishikesh'),
+  E('l','Thali at a Laxman Jhula dhaba','North Indian',200,'thali Laxman Jhula Rishikesh'),
+  E('d','Satvik thali in Tapovan','Vegetarian',250,'satvik thali Tapovan Rishikesh'),
+  E('d','Ganga-view café dinner','Cafés',400,'Ganga view cafe Tapovan Rishikesh',1),
+  E('s','Kachori and jalebi near Ram Jhula','Street food',80,'kachori jalebi Ram Jhula Rishikesh')]},
+{id:'varanasi',name:'Varanasi',state:'Uttar Pradesh',lat:25.3109,lng:83.0107,tags:['visited','seasonal'],blurb:'The ghats, the aarti and the lanes. Cool mornings in winter.',hue:35,k:'dome',rail:'direct',air:'direct',leg:{c:0,h:0},ci:0.85,cur:true,
+ areas:'Near Assi Ghat for a calmer stay, or near Godowlia for the old-city lanes',
+ tips:['Ghat lanes are narrow and crowded. Keep valuables close.','Agree boat fares before you board.','Photography near the cremation ghats is not appropriate.'],
+ places:[
+  P('C','Dashashwamedh Ghat and Ganga aarti','The main ghat and its evening ceremony. Arrive early for a spot.',0,1.5,25.307,83.0105,'e'),
+  P('N','Assi Ghat at sunrise','Quieter ghat. Morning yoga and chai.',0,1.5,25.289,83.006,'m'),
+  P('L','Sunrise boat ride along the ghats','Shared or private boat past the ghats. Fee is a per-person estimate.',300,2,25.3,83.01,'m',{act:1}),
+  P('C','Kashi Vishwanath Temple','Major temple in the old city. Expect queues and security checks.',0,1.5,25.3109,83.0107,'a'),
+  P('C','Sarnath','Buddhist site with the Dhamek Stupa and a museum. About 10 km out.',25,3,25.3813,83.0229,'a'),
+  P('H','BHU campus and Bharat Kala Bhavan','Large green campus and a museum of art.',20,2,25.2677,82.9913,'a'),
+  P('C','Ramnagar Fort','Fort across the river with a small museum.',50,1.5,25.2699,83.0293,'a'),
+  P('S','Kachori Gali and Vishwanath Gali','Snacks, sweets and shopping in the lanes.',0,1.5,25.3103,83.0107,'m'),
+  P('L','Banarasi silk weaver visit','See handloom weaving and buy direct.',0,1.5,25.318,83.02,'a'),
+  P('C','Tulsi Manas Mandir','Temple linked to the writing of the Ramcharitmanas.',0,1,25.296,83.003,'a')],
+ eats:[
+  E('b','Kachori-sabzi and jalebi in Kachori Gali','North Indian',60,'Kachori Gali Varanasi'),
+  E('b','Kulhad chai at the ghats','Drinks',20,'chai Assi Ghat Varanasi'),
+  E('l','Thali at a local mess near Assi','North Indian',180,'thali Assi Ghat Varanasi'),
+  E('d','Litti-chokha at a local eatery','Bihari-Purvanchal',150,'litti chokha Varanasi'),
+  E('s','Tamatar chaat at Kashi Chat Bhandar','Street food',90,'Kashi Chat Bhandar Varanasi'),
+  E('s','Malaiyo (winter only) near the old lanes','Sweets',40,'malaiyo Varanasi'),
+  E('s','Lassi at Blue Lassi','Drinks',100,'Blue Lassi Varanasi')]},
+{id:'udaipur',name:'Udaipur',state:'Rajasthan',lat:24.5854,lng:73.7125,tags:['visited','seasonal'],blurb:'Lakes, palaces and rooftop sunsets. Pleasant from October to March.',hue:200,k:'dome',rail:'direct',air:'direct',leg:{c:0,h:0},ci:1.2,cur:true,
+ areas:'Old city near Lake Pichola (Lal Ghat or Gangaur Ghat side)',
+ tips:['Old-city lanes are steep. Pack comfortable shoes.','Sunset is best from the ghats and rooftops.','Lake boat timings depend on water level and season. Ask on arrival.'],
+ places:[
+  P('C','City Palace','Palace museum above Lake Pichola.',300,2,24.5764,73.6835,'m'),
+  P('N','Lake Pichola boat ride','Short boat ride on the lake.',400,1,24.576,73.68,'a',{act:1}),
+  P('C','Jagdish Temple','Indo-Aryan temple in the old city.',0,0.75,24.5802,73.6837,'m'),
+  P('F','Saheliyon ki Bari','Landscaped garden with fountains.',50,1,24.5995,73.6877,'a'),
+  P('N','Sajjangarh (Monsoon Palace) at sunset','Hilltop palace with a wide view of the lakes.',150,2,24.595,73.635,'e'),
+  P('C','Bagore ki Haveli','Haveli museum. A folk dance show runs in the evening.',100,1.5,24.5788,73.6812,'e'),
+  P('F','Fateh Sagar Lake and Moti Magri','Lakeside promenade and a hill memorial.',20,1.5,24.6015,73.675,'a'),
+  P('L','Shilpgram craft village','Crafts, performances and rural architecture.',50,2,24.571,73.635,'a'),
+  P('H','Ahar Cenotaphs','Royal cenotaphs away from the tourist crowd.',0,1,24.5885,73.736,'m'),
+  P('N','Gangaur Ghat at sunset','Free lakeside spot for the evening light.',0,1,24.5805,73.6838,'e')],
+ eats:[
+  E('b','Poha-jalebi at lane stalls near Jagdish Temple','Street breakfast',70,'poha jalebi near Jagdish Temple Udaipur'),
+  E('l','Unlimited Rajasthani thali at a local dining hall','Rajasthani',300,'Rajasthani thali dining hall Udaipur'),
+  E('d','Dal-baati-churma at a family restaurant','Rajasthani',280,'dal baati churma Udaipur'),
+  E('d','Lake-view rooftop dinner','Rooftop',600,'rooftop restaurant lake view Udaipur',1),
+  E('s','Mirchi bada and kachori in Bapu Bazaar','Street food',80,'mirchi bada Udaipur'),
+  E('s','Chai and coffee at a lake-view rooftop','Cafés',120,'rooftop cafe Lake Pichola Udaipur')]},
+L('hampi','Hampi','Karnataka',15.335,76.46,['hidden','seasonal'],'Boulder landscapes and ruined temples. Best in the cooler months.',110,'mountain','near','near',{c:150,h:1},0.8),
+L('munnar','Munnar','Kerala',10.0889,77.0595,['seasonal'],'Tea hills and cool air in the Western Ghats.',140,'mountain','near','near',{c:450,h:4.5},1.1),
+L('pondicherry','Pondicherry','Puducherry',11.9416,79.8083,['weekend','trending'],'French Quarter streets, cafés and a long seafront.',185,'wave','near','near',{c:200,h:2},1.1),
+L('gokarna','Gokarna','Karnataka',14.5479,74.3188,['hidden','weekend'],'Quieter beaches and a temple town.',175,'wave','near','near',{c:300,h:2},0.95),
+L('kasol','Kasol','Himachal Pradesh',32.0099,77.3149,['trending','hidden'],'Parvati Valley village with river walks and cafés.',200,'mountain','near','near',{c:600,h:7},0.9),
+L('darjeeling','Darjeeling','West Bengal',27.036,88.2627,['visited','seasonal'],'Tea estates and Himalayan views.',120,'mountain','near','near',{c:300,h:3.5},1),
+L('mcleodganj','McLeodganj','Himachal Pradesh',32.2426,76.3213,['weekend','trending'],'Tibetan culture and Dhauladhar views.',215,'mountain','near','near',{c:350,h:3},0.95),
+L('jaisalmer','Jaisalmer','Rajasthan',26.9157,70.9083,['seasonal'],'Golden fort and desert camps. Winter is the best time.',45,'dome','direct','direct',{c:0,h:0},1),
+L('coorg','Coorg','Karnataka',12.4244,75.7382,['weekend','hidden'],'Coffee estates, waterfalls and misty hills.',130,'mountain','near','near',{c:350,h:3.5},1.1),
+L('ooty','Ooty','Tamil Nadu',11.41,76.695,['visited'],'Hill station with a toy train and tea gardens.',150,'mountain','near','near',{c:250,h:3},1.05),
+L('alleppey','Alleppey','Kerala',9.4981,76.3388,['seasonal','trending'],'Backwaters and houseboats. The season runs through winter.',175,'wave','direct','near',{c:400,h:1.5},1.1),
+L('leh','Leh-Ladakh','Ladakh',34.1526,77.5771,['trending','seasonal'],'High-altitude monasteries, lakes and mountain passes. Summer is the main season.',205,'mountain','none','direct',{c:0,h:0},1.35),
+L('srinagar','Srinagar','Jammu & Kashmir',34.0837,74.7973,['visited','seasonal'],'Dal Lake, Mughal gardens and houseboats.',195,'wave','near','direct',{c:500,h:4},1.15),
+L('mussoorie','Mussoorie','Uttarakhand',30.4598,78.0664,['weekend','visited'],'Hill station above Dehradun with misty ridges and cafés.',150,'mountain','near','near',{c:300,h:2},1.1),
+L('nainital','Nainital','Uttarakhand',29.3919,79.4542,['weekend','visited'],'Lake town in the Kumaon hills.',185,'wave','near','near',{c:350,h:2},1.1),
+L('kaza','Spiti Valley (Kaza)','Himachal Pradesh',32.2276,78.071,['hidden','seasonal'],'Cold-desert valley with high monasteries. Roads close in winter.',30,'mountain','none','none',{c:0,h:0},1.2),
+L('amritsar','Amritsar','Punjab',31.634,74.8723,['visited','weekend'],'Golden Temple, Wagah border ceremony and Punjabi food.',45,'dome','direct','direct',{c:0,h:0},0.95),
+L('agra','Agra','Uttar Pradesh',27.1767,78.0081,['visited','weekend'],'Taj Mahal, Agra Fort and Mughal-era streets.',35,'dome','direct','none',{c:0,h:0},1.0),
+L('khajuraho','Khajuraho','Madhya Pradesh',24.8318,79.9199,['hidden','seasonal'],'Medieval temples known for their carved sculpture.',25,'dome','direct','direct',{c:0,h:0},1.0),
+L('mysuru','Mysuru','Karnataka',12.2958,76.6394,['visited','weekend'],'Palaces, markets and sandalwood scent. Lit up during Dasara.',50,'dome','direct','near',{c:700,h:3},0.95),
+L('kodaikanal','Kodaikanal','Tamil Nadu',10.2381,77.4892,['weekend','seasonal'],'Lake, pine forests and viewpoints in the Palani hills.',145,'mountain','near','near',{c:600,h:3.5},1.0),
+L('kochi','Kochi','Kerala',9.9312,76.2673,['trending','visited'],'Fort Kochi streets, Chinese fishing nets and seafood.',185,'wave','direct','direct',{c:0,h:0},1.1),
+L('portblair','Andaman Islands (Port Blair)','Andaman & Nicobar',11.6234,92.7265,['seasonal','trending'],'Clear water, beaches and a colonial-era jail museum. Needs a flight.',190,'wave','none','direct',{c:0,h:0},1.4),
+L('gangtok','Gangtok','Sikkim',27.3389,88.6065,['trending','seasonal'],'Himalayan capital with monasteries and mountain views.',130,'mountain','near','near',{c:900,h:4.5},1.1),
+L('shillong','Shillong','Meghalaya',25.5788,91.8933,['hidden','trending'],'Waterfalls, living-root bridges nearby and a lively café scene.',120,'mountain','near','near',{c:700,h:3.5},1.0),
+L('kaziranga','Kaziranga','Assam',26.5775,93.1711,['seasonal','hidden'],'National park known for one-horned rhinos. Open in the dry season.',105,'compass','near','near',{c:800,h:2.5},1.0),
+L('pushkar','Pushkar','Rajasthan',26.4897,74.5511,['weekend','visited'],'Sacred lake town with ghats, temples and a camel fair in autumn.',30,'lantern','near','near',{c:1500,h:3},0.9),
+L('mountabu','Mount Abu','Rajasthan',24.5926,72.7156,['weekend','seasonal'],'Rajasthan\u2019s hill station with marble Jain temples.',160,'mountain','near','near',{c:1800,h:3.5},1.0),
+L('bikaner','Bikaner','Rajasthan',28.0229,73.3119,['hidden'],'Junagarh Fort, havelis and a famous snack market.',25,'dome','direct','none',{c:0,h:0},0.85),
+L('jodhpur','Jodhpur','Rajasthan',26.2389,73.0243,['visited','seasonal'],'The blue city under Mehrangarh Fort.',210,'dome','direct','direct',{c:0,h:0},0.95),
+L('ranthambore','Ranthambore','Rajasthan',26.0173,76.5026,['seasonal','trending'],'Tiger reserve with a ruined hill fort inside.',20,'compass','near','near',{c:1800,h:3.5},1.2),
+L('mahabaleshwar','Mahabaleshwar','Maharashtra',17.9237,73.6586,['weekend','seasonal'],'Viewpoints, strawberry farms and cool air.',115,'mountain','near','near',{c:900,h:3},1.1),
+L('lonavala','Lonavala','Maharashtra',18.7557,73.4091,['weekend'],'Monsoon hill getaway between Mumbai and Pune.',140,'mountain','direct','near',{c:900,h:2},1.1),
+L('aurangabad','Ajanta & Ellora (Aurangabad)','Maharashtra',19.8762,75.3433,['hidden','seasonal'],'Rock-cut cave temples and monasteries, both UNESCO sites.',30,'dome','direct','direct',{c:0,h:0},0.9),
+L('diu','Diu','Daman & Diu',20.7141,70.9874,['hidden','weekend'],'Quiet island with a Portuguese fort and beaches.',185,'wave','near','direct',{c:400,h:1.5},0.9),
+L('kutch','Rann of Kutch','Gujarat',23.8296,69.6791,['seasonal','trending'],'White salt desert. The Rann Utsav runs in winter.',55,'compass','near','near',{c:500,h:2.5},1.1),
+L('puri','Puri','Odisha',19.8135,85.8312,['visited','weekend'],'Jagannath Temple, a long beach and the nearby Konark sun temple.',200,'wave','direct','near',{c:900,h:2},0.9),
+L('shimla','Shimla','Himachal Pradesh',31.1048,77.1734,['visited','weekend'],'Colonial hill capital with the Mall Road and a toy train.',140,'mountain','direct','near',{c:1500,h:3},1.1),
+L('ayodhya','Ayodhya','Uttar Pradesh',26.7922,82.1998,['visited','trending'],'Temple town on the Sarayu river.',40,'dome','direct','direct',{c:0,h:0},0.9),
+L('auli','Auli','Uttarakhand',30.528,79.568,['seasonal','trending'],'Snow-covered slopes, Himalayan views and skiing in winter.',160,'mountain','near','near',{c:900,h:4},1.1),
+L('chopta','Chopta','Uttarakhand',30.488,79.216,['hidden','seasonal'],'Himalayan meadows and the trekking route to Tungnath and Chandrashila.',120,'mountain','near','near',{c:800,h:4},1.1),
+L('tirthan','Tirthan Valley','Himachal Pradesh',31.588,77.435,['hidden','weekend'],'Riverside homestays, forest walks and quiet Himalayan villages.',150,'mountain','near','near',{c:700,h:3.5},1.0),
+L('bir','Bir Billing','Himachal Pradesh',32.05,76.72,['trending','weekend'],'Paragliding, Tibetan monasteries and relaxed mountain cafes.',180,'mountain','near','near',{c:500,h:3},1.0),
+L('ranikhet','Ranikhet','Uttarakhand',29.64,79.43,['hidden','weekend'],'Pine forests, Kumaoni culture and Himalayan viewpoints.',145,'mountain','near','near',{c:400,h:2.5},1.0),
+L('almora','Almora','Uttarakhand',29.598,79.66,['hidden','seasonal'],'Kumaoni culture, mountain views, temples and traditional markets.',155,'mountain','near','near',{c:450,h:3},1.0),
+L('pahalgam','Pahalgam','Jammu & Kashmir',34.016,75.315,['seasonal','trending'],'Lidder River, pine forests and Kashmir valley scenery.',195,'mountain','near','near',{c:700,h:4},1.2),
+L('gulmarg','Gulmarg','Jammu & Kashmir',34.048,74.38,['seasonal','trending'],'Snow adventures, gondola rides and spectacular mountain scenery.',200,'mountain','near','near',{c:800,h:4},1.2),
+L('sonamarg','Sonamarg','Jammu & Kashmir',34.3,75.29,['seasonal','hidden'],'Glaciers, alpine landscapes and dramatic Himalayan mountain roads.',205,'mountain','near','near',{c:900,h:4.5},1.2),
+L('lansdowne','Lansdowne','Uttarakhand',29.84,78.68,['weekend','hidden'],'Peaceful pine-covered hill town with colonial-era architecture.',150,'mountain','near','near',{c:350,h:2.5},1.0),
+L('kausani','Kausani','Uttarakhand',29.84,79.60,['hidden','seasonal'],'Quiet Kumaon hill town known for wide Himalayan views, tea gardens and peaceful walks.',155,'mountain','near','near',{c:450,h:3},1.0),
+L('binsar','Binsar','Uttarakhand',29.70,79.76,['hidden','seasonal'],'Forest sanctuary, oak and rhododendron trails, and panoramic Himalayan viewpoints.',150,'mountain','near','near',{c:500,h:3.5},1.0),
+L('munsiyari','Munsiyari','Uttarakhand',30.07,80.24,['hidden','seasonal'],'Remote mountain town with dramatic Panchachuli views and trekking routes.',205,'mountain','near','near',{c:900,h:5},1.2),
+L('mukteshwar','Mukteshwar','Uttarakhand',29.47,79.65,['weekend','hidden'],'Orchards, forest trails, cliff viewpoints and quiet Kumaon homestays.',155,'mountain','near','near',{c:500,h:3},1.0),
+L('dhanaulti','Dhanaulti','Uttarakhand',30.42,78.24,['weekend','seasonal'],'Deodar forests, mountain air and a quieter alternative to busy hill towns.',145,'mountain','near','near',{c:450,h:3},1.0),
+L('kanatal','Kanatal','Uttarakhand',30.41,78.32,['weekend','hidden'],'Small Himalayan getaway with forest stays, valley views and outdoor activities.',145,'mountain','near','near',{c:500,h:3},1.0),
+L('jibhi','Jibhi','Himachal Pradesh',31.59,77.35,['hidden','trending'],'Wooden village stays, riverside walks and forest trails in the Tirthan region.',155,'mountain','near','near',{c:700,h:3.5},1.0),
+L('shoja','Shoja','Himachal Pradesh',31.56,77.43,['hidden','seasonal'],'Quiet mountain hamlet with cedar forests, viewpoints and access to Jalori Pass.',160,'mountain','near','near',{c:700,h:3.5},1.0),
+L('kalpa','Kalpa','Himachal Pradesh',31.54,78.25,['hidden','seasonal'],'Kinnaur village with striking Kinner Kailash views, orchards and monasteries.',190,'mountain','near','near',{c:800,h:4},1.1),
+L('chitkul','Chitkul','Himachal Pradesh',31.35,78.44,['hidden','seasonal'],'High-altitude village in the Baspa Valley with riverside scenery and mountain trails.',195,'mountain','near','near',{c:850,h:4},1.1)
+];
+D.forEach(d=>{
+  if(!d.cur){d.places=[];d.tips=GENTIPS.slice();d.areas='A central area near the main market or bus stand';
+    d.eats=[E('b','Local breakfast (tiffin or paratha stall)','Regional',70,'breakfast in '+d.name),E('l','Local thali or meals','Regional',150,'thali in '+d.name),E('d','Family restaurant dinner','Regional',220,'family restaurant in '+d.name),E('s','Street food and tea','Street food',60,'street food in '+d.name)]}
+  else d.tips=d.tips.concat(GENTIPS.slice(0,2));
+  d.places.forEach((p,i)=>p.id=d.id+'-p'+i);
+  d.eats.forEach((e,i)=>e.id=d.id+'-e'+i);
+});
+
+/* ---------- state ---------- */
+const ROUTES=['home','transport','places','stay','food','local','itinerary','booking'];
+const STEPN={home:'Search',transport:'Travel',places:'Places',stay:'Stay',food:'Food',local:'Getting around',itinerary:'Itinerary',booking:'Book'};
+const S={ready:false,destText:'',originText:'',dest:null,origin:null,n:1,budget:15000,days:3,km:null,grp:'visited',
+  tid:null,tidAuto:true,places:new Set(),placesInit:false,pcat:'all',stayId:null,stayAuto:true,eats:new Set(),eatsInit:false,localId:null,localAuto:true,confirmed:false,visited:new Set(['home'])};
+let route='home';
+
+/* ---------- planning engine (rule-based; the LLM hook would replace/augment this) ---------- */
+const nights=(days=S.days)=>Math.max(0,days-1);
+function dist(){const d=S.dest,o=S.origin;return(d&&o&&d.lat!=null&&o.lat!=null)?Math.round(hav(o.lat,o.lng,d.lat,d.lng)*1.3):(S.km||0)}
+function opts(days=S.days){
+  const d=S.dest,km=dist(),n=S.n,veh=Math.ceil(n/4),out=[],nm=S.origin.name,dn=d.name;
+  if(d.cmsTravel?.length){const custom=d.cmsTravel.map(x=>{const lo=Number(x.typical_fare_min)||0,hi=Number(x.typical_fare_max)||lo;return{id:'cms-travel-'+x.id,mode:x.mode,cls:x.details||x.provider_name||'Travel option',total:r10((lo+hi)*n),hrs:parseFloat(x.duration)||0,note:'Typical fare entered by Safar Planner; confirm current fare and availability with provider.',link:x.booking_url?[x.provider_name||'Book with provider',x.booking_url]:null}});custom.forEach(o=>{o.pp=r10(o.total/n);o.share=o.total/S.budget;o.fc=o.share<=.3?'ok':o.share<=.45?'warn':'bad';o.ft=o.share<=.3?'Comfortable':o.share<=.45?'Workable':'Stretches budget';o.score=o.hrs+(o.total/(S.budget*.45))*8;o.best=false});if(custom.length)custom[0].best=true;return custom;}
+  const add=o=>{o.total=r10(o.total);o.pp=r10(o.total/n);out.push(o)};
+  const lg=k=>d[k]==='near'?d.leg:{c:0,h:0};
+  if(d.rail!=='none'&&km>=60){const l=lg('rail'),nt=d.rail==='near'?'Includes an estimated road leg from the nearest station.':'';
+    add({id:'train-sl',mode:'Train',cls:'Sleeper class',total:2*n*(0.45*km+20+l.c),hrs:km/55+l.h,note:('Lowest rail fare. Reserve early for popular dates. '+nt).trim(),link:['IRCTC','https://www.irctc.co.in/nget/train-search']});
+    if(km>=250)add({id:'train-3a',mode:'Train',cls:'3AC (air-conditioned)',total:2*n*(1.25*km+60+l.c),hrs:km/55+l.h,note:('More comfortable overnight. '+nt).trim(),link:['IRCTC','https://www.irctc.co.in/nget/train-search']});}
+  if(km>=30&&km<=1800)add({id:'bus-g',mode:'Bus',cls:'State transport, ordinary or express',total:2*n*1.1*km,hrs:km/42,note:'Run by state transport corporations on many routes. Check the depot or operator site.',link:['redBus','https://www.redbus.in/']});
+  if(km>=200&&km<=1600)add({id:'bus-p',mode:'Bus',cls:'Private AC sleeper',total:2*n*2.0*km,hrs:km/45,note:'Overnight option on longer routes. Compare operators and ratings on the booking site.',link:['redBus','https://www.redbus.in/']});
+  if(d.air!=='none'&&km>=450){const l=lg('air'),f=Math.min(9500,2600+1.9*km)+l.c;
+    add({id:'flight',mode:'Flight',cls:'Economy',total:2*n*f,hrs:(km/1.3)/700+3.2+l.h,note:'Time includes airport transfers and check-in. '+(d.air==='near'?'Fares include an estimated road leg from the nearest airport.':'Fares move a lot with the booking date.'),link:['Google Flights','https://www.google.com/travel/flights']});}
+  if(km>=40&&km<=700)add({id:'shared',mode:'Shared taxi',cls:'Seat in a shared cab',total:2*n*2.6*km,hrs:km/45,note:'Where shared taxis run (common on hill routes). Ask locally, as there is no central booking.',link:['Search taxis','https://www.google.com/search?q='+enc('shared taxi '+nm+' to '+dn)]});
+  if(km<=1100)add({id:'cab',mode:'Private cab',cls:veh>1?veh+' cabs (4 seats each)':'Outstation cab (up to 4)',total:veh*(2*11*km+400),hrs:km/50,note:'Door to door. Billed per km for the round trip, with driver allowance and tolls often extra.',link:['Search cabs','https://www.google.com/search?q='+enc('outstation cab '+nm+' to '+dn)]});
+  if(km<=800)add({id:'drive',mode:'Self-drive',cls:veh>1?veh+' rental cars':'Rental car',total:veh*(2300*days+2*km/14*100+2*km*0.8),hrs:km/55,note:'Includes rental for the whole trip, fuel at about 14 km per litre, and rough tolls. Needs a valid licence and a deposit.',link:['Zoomcar','https://www.zoomcar.com/in']});
+  const bud=S.budget;let cand=out.filter(o=>o.total<=0.45*bud);
+  out.forEach(o=>{const sh=o.total/bud;o.share=sh;o.fc=sh<=0.3?'ok':sh<=0.45?'warn':'bad';o.ft=sh<=0.3?'Comfortable':sh<=0.45?'Workable':'Stretches budget';
+    o.score=o.hrs+(o.total/(bud*0.45))*8+(2*o.hrs/(days*24))*25});
+  let best=null;
+  if(cand.length)best=cand.reduce((a,b)=>b.score<a.score?b:a);else if(out.length)best=out.reduce((a,b)=>b.total<a.total?b:a);
+  out.forEach(o=>o.best=o===best);return out}
+const TIERS=[
+ {id:'dorm',name:'Dormitory bed',unit:'bed',base:350,amen:['Locker','Shared bathroom','Common area'],tip:'Cheapest option. Good for solo travellers who want company.'},
+ {id:'hostel',name:'Hostel',unit:'bed',base:650,amen:['Locker','Common area','Private room sometimes available'],tip:'Social, central and low cost. Look for women-only dorms if you prefer.'},
+ {id:'guest',name:'Guesthouse',unit:'room',base:1100,amen:['Private room','Attached bathroom','Owner-run'],tip:'Simple rooms, often with helpful hosts.'},
+ {id:'home',name:'Homestay',unit:'room',base:1500,amen:['Private room','Home-cooked meals often available','Local host'],tip:'A good way to get local advice and home food.'},
+ {id:'budget',name:'Budget hotel',unit:'room',base:1900,amen:['Private room','Reception','Usually near transport'],tip:'Predictable basics. Check recent reviews before booking.'},
+ {id:'mid',name:'Mid-range hotel',unit:'room',base:4200,amen:['Private room','Breakfast often included','Air conditioning'],tip:'More comfort and facilities for a moderate price.'},
+ {id:'prem',name:'Premium hotel',unit:'room',base:9500,amen:['Full service','Restaurant','Often a pool or spa'],tip:'Best for short, relaxed trips with a larger budget.'}];
+function stays(days=S.days){const nn=nights(days),rooms=Math.ceil(S.n/2),ci=S.dest.ci;
+  if(S.dest.cmsStays?.length)return S.dest.cmsStays.map(x=>{const lo=Number(x.price_min)||Number(x.price_max)||0,hi=Number(x.price_max)||lo,unit=(lo+hi)/2,night=unit*rooms;return{id:'cms-stay-'+x.id,name:x.name,unit:'room',base:unit,amen:String(x.facilities||'').split(/[,\n]/).map(v=>v.trim()).filter(Boolean),tip:x.description||x.stay_type||'Recommended accommodation',night:r10(night),total:r10(night*nn),lo,hi,qty:rooms,booking_url:x.booking_url,map_url:x.map_url,contact:x.contact}});
+  return TIERS.map(t=>{const unit=t.base*ci,night=(t.unit==='bed'?S.n:rooms)*unit;return Object.assign({},t,{night:r10(night),total:r10(night*nn),lo:Math.round(unit*0.75/50)*50,hi:Math.round(unit*1.25/50)*50,qty:t.unit==='bed'?S.n:rooms})})}
+function recStay(){const st=stays().slice().sort((a,b)=>a.total-b.total),T=opts().find(x=>x.id===S.tid),rem=S.budget-(T?T.total:0);let pick=st[0];
+  st.forEach(t=>{const lim=(t.id==='prem'?0.25:0.38)*rem;if(t.total<=lim&&plan({stay:t.id,local:'public'}).total<=S.budget*0.95)pick=t});return pick}
+function foodPD(){const e=S.dest.eats.filter(x=>S.eats.has(x.id)),ci=S.dest.ci;
+  const av=(s,def)=>{const l=e.filter(x=>x.slot===s);return l.length?l.reduce((a,x)=>a+x.cost,0)/l.length:def*ci};
+  return av('b',70)+av('l',150)+av('d',220)+av('s',60)}
+function localOpts(days=S.days){const n=S.n,ci=S.dest.ci,veh=Math.ceil(n/4),two=Math.ceil(n/2),nm=S.dest.name;if(S.dest.cmsTransport?.length)return S.dest.cmsTransport.map(x=>{const lo=Number(x.fare_min)||0,hi=Number(x.fare_max)||lo;return{id:'cms-local-'+x.id,name:x.name,total:r10(((lo+hi)/2)*n*days),cost:lo===hi?inr(lo):inr(lo)+'–'+inr(hi),detail:x.description||x.route||x.transport_type||'Local transport option',dep:'Confirm with provider',fuel:'As quoted by provider',av:'Availability not verified; contact provider before travel.',q:x.route||x.name+' '+nm,link:[x.name,x.booking_url||x.map_url||gm(x.name+' '+nm)],contact:x.contact}});return[
+ {id:'walk',name:'Walking routes',total:0,cost:'Free',detail:'Group nearby stops by area and walk between them.',dep:'None',fuel:'None',av:'Always possible. Some stops are too far to walk.',q:'walking routes '+nm,link:['Open Google Maps','https://www.google.com/maps']},
+ {id:'public',name:'Public transport',total:100*ci*n*days,cost:'About '+inr(100*ci)+' per person per day',detail:'City buses, metro where it exists, and shared autos.',dep:'None',fuel:'None',av:'Varies by city and hour. Coverage can be thin in smaller towns.',q:'bus stand '+nm,link:['Find stops on Google Maps',gm('bus stand '+nm)]},
+ {id:'shared',name:'Shared cabs and autos',total:250*ci*n*days,cost:'About '+inr(250*ci)+' per person per day',detail:'Shared autos and app cabs for the longer hops.',dep:'None',fuel:'Included in fare',av:'Coverage varies. App cabs may not operate everywhere.',q:'auto stand '+nm,link:['Find stands on Google Maps',gm('auto rickshaw stand '+nm)]},
+ {id:'taxi',name:'Private taxi (day hire)',total:2200*ci*veh*days,cost:'About '+inr(2200*ci)+' per cab per day'+(veh>1?' ('+veh+' cabs)':''),detail:'A cab and driver for the day. Best for spread-out sights.',dep:'None, paid per trip',fuel:'Included in the day rate',av:'Ask for a clear quote that states the hours and km included.',q:'taxi service '+nm,link:['Find taxi services',gm('taxi service '+nm)]},
+ {id:'scooter',name:'Scooter rental',total:(450+100)*ci*two*days,cost:'About '+inr(450*ci)+' per scooter per day, plus fuel',detail:'Two people per scooter. You need a valid licence and a helmet.',dep:'Often ₹1,500–3,000 or an ID held (varies)',fuel:'About '+inr(100*ci)+' per scooter per day',av:'Not verified. Confirm stock with the shop for your dates.',q:'scooter rental '+nm,link:['Find rental shops',gm('scooter rental '+nm)]},
+ {id:'bike',name:'Motorbike rental',total:(600+200)*ci*two*days,cost:'About '+inr(600*ci)+' per bike per day, plus fuel',detail:'Two people per bike. Better for hills and longer rides. Licence and helmet required.',dep:'Often ₹2,000–5,000 or an ID held (varies)',fuel:'About '+inr(200*ci)+' per bike per day',av:'Not verified. Confirm stock with the shop for your dates.',q:'bike rental '+nm,link:['Royal Brothers','https://www.royalbrothers.com/']}]}
+function recLocal(){const order=S.n>=3?['taxi','shared','public','walk']:['shared','public','walk'],lo=localOpts();
+  for(const id of order){const x=lo.find(y=>y.id===id);if(x.total<=0.15*S.budget&&plan({local:id}).total<=S.budget*0.95)return id}return'walk'}
+function recPlaces(){const d=S.dest,n=S.n,w={F:3,H:3.3,C:2.8,N:2.6,L:2.5,S:2.2};
+  const sc=d.places.map(p=>({p,s:w[p.cat]-(p.fee*(p.act?1.4:1))/400-hav(d.lat,d.lng,p.lat,p.lng)/45})).sort((a,b)=>b.s-a.s);
+  const tgt=Math.min(d.places.length,Math.max(2,Math.round(S.days*2.3))),cap=0.12*S.budget;let cost=0;const ids=[];
+  for(const x of sc){if(ids.length>=tgt)break;const c=x.p.fee*n;if(cost+c>cap&&c>0)continue;cost+=c;ids.push(x.p.id)}return ids}
+function recEats(){const ids=[];['b','l','d','s'].forEach(s=>{const e=S.dest.eats.find(x=>x.slot===s&&!x.tourist);if(e)ids.push(e.id)});return ids}
+function ensure(){
+  const o=opts();if(S.tidAuto||!o.some(x=>x.id===S.tid)){const b=o.find(x=>x.best)||o[0];S.tid=b?b.id:null}
+  if(!S.placesInit){S.places=new Set(recPlaces());S.placesInit=true}
+  if(!S.eatsInit){S.eats=new Set(recEats());S.eatsInit=true}
+  if(nights()===0)S.stayId=null;else if(S.stayAuto||!stays().some(x=>x.id===S.stayId))S.stayId=recStay().id;
+  if(S.localAuto||!localOpts().some(x=>x.id===S.localId))S.localId=recLocal()}
+function plan(o){o=o||{};
+  const days=o.days!=null?o.days:S.days,n=S.n,nn=nights(days),ol=opts(days);
+  const T=ol.find(x=>x.id===(o.tid||S.tid))||ol[0]||{total:0,cls:'',mode:'Travel'};
+  const st=stays(days).find(x=>x.id===(o.stay||S.stayId));
+  const lo=localOpts(days).find(x=>x.id===(o.local||S.localId))||{total:0};
+  const ids=o.places||[...S.places],pl=ids.map(id=>S.dest.places.find(p=>p.id===id)).filter(Boolean);
+  const entry=pl.filter(p=>!p.act).reduce((a,p)=>a+p.fee,0)*n,act=pl.filter(p=>p.act).reduce((a,p)=>a+p.fee,0)*n;
+  const stay=nn>0&&st?st.total:0,food=r10(foodPD()*n*days),loc=r10(lo.total),half=r10(T.total/2);
+  const base=T.total+stay+food+loc+entry+act,misc=r10(base*0.05),cont=r10(base*0.1);
+  const lines=[
+   {k:'Travel to destination',v:half,n:T.mode+' · '+T.cls},{k:'Return travel',v:T.total-half,n:'Same mode, indicative'},
+   {k:'Accommodation',v:stay,n:nn>0&&st?nn+' night'+(nn>1?'s':'')+' · '+st.name:'Day trip, no stay'},
+   {k:'Food and drinks',v:food,n:'About '+inr(foodPD())+' per person per day'},
+   {k:'Local transport',v:loc,n:lo.name||''},
+   {k:'Entry fees',v:entry,n:pl.filter(p=>!p.act&&p.fee).length+' paid stop'+(pl.filter(p=>!p.act&&p.fee).length===1?'':'s')},
+   {k:'Activities',v:act,n:pl.filter(p=>p.act).length+' paid '+(pl.filter(p=>p.act).length===1?'activity':'activities')},
+   {k:'Miscellaneous (5%)',v:misc,n:'Tips, water, small purchases'},
+   {k:'Emergency buffer (10%)',v:cont,n:'Kept aside, not planned for spending'}];
+  const total=lines.reduce((a,l)=>a+l.v,0);
+  return{lines,total,pp:total/n,perDay:total/days,remaining:S.budget-total,T,stay:st,loc:lo}}
+function cheapestPlan(days){const ol=opts(days).slice().sort((a,b)=>a.total-b.total),st=stays(days).slice().sort((a,b)=>a.total-b.total);
+  return plan({days,tid:ol[0]&&ol[0].id,stay:st[0].id,local:'walk',places:S.dest.places.filter(p=>p.fee===0&&S.places.has(p.id)).map(p=>p.id)})}
+function suggestions(p){const out=[],cur=p.total,ol=opts().slice().sort((a,b)=>a.total-b.total),st=stays().slice().sort((a,b)=>a.total-b.total);
+  const add=(t,v)=>{const s=cur-v.total;if(s>=50)out.push({t,s})};
+  if(ol[0]&&ol[0].id!==S.tid)add('Travel by '+ol[0].mode.toLowerCase()+' ('+ol[0].cls.toLowerCase()+')',plan({tid:ol[0].id}));
+  if(nights()>0&&st[0].id!==S.stayId)add('Stay in a '+st[0].name.toLowerCase(),plan({stay:st[0].id}));
+  if(S.localId!=='walk')add('Use walking routes for local travel',plan({local:'walk'}));
+  const free=S.dest.places.filter(x=>x.fee===0&&S.places.has(x.id)).map(x=>x.id);
+  if(free.length<S.places.size)add('Keep only free stops',plan({places:free}));
+  if(S.days>1)add('Shorten the trip by one day',plan({days:S.days-1}));
+  return out.sort((a,b)=>b.s-a.s).slice(0,4)}
+function overBanner(){
+  const p=plan();if(p.total<=S.budget)return'';
+  const short=p.total-S.budget,sg=suggestions(p),mn=cheapestPlan(S.days);let fit=0;
+  for(let d=S.days-1;d>=1;d--){if(cheapestPlan(d).total<=S.budget){fit=d;break}}
+  return`<div class="banner" role="alert"><h3>This plan is ${inr(short)} over your budget</h3>
+  <p>Estimated total ${inr(p.total)} against a budget of ${inr(S.budget)}. ${mn.total>S.budget?'Even the leanest version (cheapest travel, a dorm or lowest-priced stay, walking, free stops only) comes to about '+inr(mn.total)+', so you are '+inr(mn.total-S.budget)+' short.'+(fit?' With the leanest choices, your budget covers about '+fit+' day'+(fit>1?'s':'')+'.':' A trip this long does not fit even at the leanest setting. Raise the budget or choose a closer destination.'):'Cheaper choices below bring it within budget.'}</p>
+  ${sg.length?'<ul>'+sg.map(x=>'<li>'+x.t+' · saves about '+inr(x.s)+'</li>').join('')+'</ul>':''}
+  <button class="btn primary sm" data-act="cheap">Switch to the cheapest options</button></div>`}
+
+/* ---------- itinerary ---------- */
+const tmin=(a,b)=>Math.max(5,Math.round(hav(a.lat,a.lng,b.lat,b.lng)*1.4/22*60));
+function buildItin(){
+  const d=S.dest,D_=S.days,sel=d.places.filter(p=>S.places.has(p.id));
+  let cur=[d.lat,d.lng],rest=sel.slice(),ord=[];
+  while(rest.length){let bi=0,bd=1e9;rest.forEach((p,i)=>{const x=hav(cur[0],cur[1],p.lat,p.lng);if(x<bd){bd=x;bi=i}});const p=rest.splice(bi,1)[0];ord.push(p);cur=[p.lat,p.lng]}
+  const caps=Array.from({length:D_},(_,i)=>D_===1?7:(i===0||i===D_-1)?3.5:8);
+  const days=caps.map(()=>({ps:[],used:0})),left=[];let di=0;
+  for(const p of ord){
+    let placed=false;
+    while(di<D_){const dy=days[di],pv=dy.ps[dy.ps.length-1],tt=pv?tmin(pv,p)/60:0;
+      if(!dy.ps.length||(dy.used+tt+p.hrs<=caps[di]&&dy.ps.length<4)){dy.used+=tt+p.hrs;dy.ps.push(p);placed=true;break}di++}
+    if(!placed)left.push(p)}
+  const E_=d.eats.filter(e=>S.eats.has(e.id)),by=s=>E_.filter(e=>e.slot===s);
+  const nn=nights(),loc=plan().loc,st=plan().stay,fpp=foodPD();
+  const out=days.map((dy,i)=>{
+    const ps=dy.ps.slice().sort((a,b)=>(a.slot==='m'?0:a.slot==='e'?2:1)-(b.slot==='m'?0:b.slot==='e'?2:1));
+    const slots={m:[],a:[],e:[]};
+    ps.forEach(p=>{if(p.slot==='e'&&!slots.e.length)slots.e.push(p);else if(p.slot==='m'&&!slots.m.length)slots.m.push(p);else if(!slots.m.length&&p.slot!=='e')slots.m.push(p);else if(!slots.a.length||slots.a.length<2&&p.slot!=='e')slots.a.push(p);else if(!slots.e.length)slots.e.push(p);else slots.a.push(p)});
+    const meal=s=>{const l=by(s);return l.length?l[i%l.length]:null};
+    const fee=ps.reduce((a,p)=>a+p.fee,0)*S.n,cost=fpp*S.n+(loc.total/S.days)+fee+((i<D_-1&&nn>0&&st)?st.night:0);
+    return{i,ps,slots,b:meal('b'),l:meal('l'),d:meal('d'),s:meal('s'),cost,title:D_===1?'Day trip':i===0?'Arrive and settle in':i===D_-1?'Last morning and return':'Explore'}});
+  return{days:out,left}}
+
+function mapSVG(it){
+  const pts=[];it.days.forEach(dy=>dy.ps.forEach((p,j)=>pts.push({p,i:dy.i,j})));
+  const d=S.dest;
+  if(!pts.length)return'<div class="empty"><p>Pick some places to see them on the map.</p></div>';
+  const all=[[d.lat,d.lng]].concat(pts.map(x=>[x.p.lat,x.p.lng])),lats=all.map(a=>a[0]),lngs=all.map(a=>a[1]);
+  const a0=Math.min(...lats),a1=Math.max(...lats),o0=Math.min(...lngs),o1=Math.max(...lngs),k=Math.cos(rad((a0+a1)/2));
+  const W=640,H=420,pad=46,sx=Math.max((o1-o0)*k,0.02),sy=Math.max(a1-a0,0.02),sc=Math.min((W-2*pad)/sx,(H-2*pad)/sy),ox=(W-sx*sc)/2,oy=(H-sy*sc)/2;
+  const X=lo=>(ox+(lo-o0)*k*sc).toFixed(1),Y=la=>(oy+(a1-la)*sc).toFixed(1),hue=i=>[190,22,265,140,330,48][i%6];
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Schematic map of selected places"><rect width="'+W+'" height="'+H+'" rx="14" style="fill:var(--surface2)"/>';
+  for(let g=1;g<6;g++)s+='<line x1="'+g*W/6+'" y1="0" x2="'+g*W/6+'" y2="'+H+'" style="stroke:var(--line)" stroke-width="1"/><line x1="0" y1="'+g*H/6+'" x2="'+W+'" y2="'+g*H/6+'" style="stroke:var(--line)" stroke-width="1"/>';
+  s+='<rect x="'+(X(d.lng)-7)+'" y="'+(Y(d.lat)-7)+'" width="14" height="14" rx="3" style="fill:var(--ink)"/><text x="'+(+X(d.lng)+12)+'" y="'+(+Y(d.lat)+4)+'" font-size="12" style="fill:var(--ink)" font-family="DM Mono,monospace">City centre</text>';
+  it.days.forEach(dy=>{if(dy.ps.length>1)s+='<polyline fill="none" stroke="hsl('+hue(dy.i)+' 60% 42%)" stroke-width="3" stroke-dasharray="7 6" points="'+dy.ps.map(p=>X(p.lng)+','+Y(p.lat)).join(' ')+'"/>'});
+  pts.forEach((x,ix)=>{const c='hsl('+hue(x.i)+' 60% 42%)',px=X(x.p.lng),py=Y(x.p.lat);
+    s+='<g class="pin" tabindex="0" role="button" data-act="pin" data-day="'+x.i+'" data-id="'+x.p.id+'" aria-label="Day '+(x.i+1)+', '+esc(x.p.name)+'"><title>'+esc(x.p.name)+'</title><circle cx="'+px+'" cy="'+py+'" r="14" fill="'+c+'" stroke="#fff" stroke-width="2.5"/><text x="'+px+'" y="'+(+py+4.5)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Instrument Sans,sans-serif" pointer-events="none">'+(x.j+1)+'</text></g>'});
+  return s+'</svg><div class="legend">'+it.days.filter(dy=>dy.ps.length).map(dy=>'<span><i style="background:hsl('+hue(dy.i)+' 60% 42%)"></i>Day '+(dy.i+1)+'</span>').join('')+'</div><div id="pininfo" class="muted">Tap a pin for details. Pins use approximate coordinates and are not a navigation map.</div>'}
+
+function dayRouteLink(dy){const ps=dy.ps;if(!ps.length)return'';
+  const ll=p=>p.lat+','+p.lng,mid=ps.slice(1,-1).map(ll).join('|');
+  return'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+enc(ll(ps[0]))+'&destination='+enc(ll(ps[ps.length-1]))+(mid?'&waypoints='+enc(mid):'')}
+
+/* ---------- pages ---------- */
+const stepHead=(t,s)=>'<div class="wrap"><div class="sh"><h2>'+t+'</h2><p class="sub">'+s+'</p></div>';
+const indic='<div class="note"><span aria-hidden="true">ℹ️</span><span><b>Indicative estimates only.</b> Prices, journey times and costs come from built-in rate tables. No live fares, ratings, opening hours or availability are connected, so confirm each item with the provider before you pay.</span></div>';
+const pl=n=>n+' traveller'+(n>1?'s':'');
+
+/* ---------- photo search words (Wikipedia) ---------- */
+const WQ={goa:'Goa beach India',varanasi:'Varanasi ghats',manali:'Manali Himachal Pradesh',rishikesh:'Rishikesh Laxman Jhula',jaipur:'Jaipur Hawa Mahal',udaipur:'Udaipur City Palace',alleppey:'Alappuzha backwaters',pondicherry:'Puducherry French Quarter',mcleodganj:'McLeod Ganj',gokarna:'Gokarna beach',coorg:'Kodagu Coorg',ooty:'Ooty Udhagamandalam',hampi:'Hampi Virupaksha Temple',munnar:'Munnar tea plantations',darjeeling:'Darjeeling tea gardens',kasol:'Kasol Parvati Valley',jaisalmer:'Jaisalmer Fort',leh:'Leh Ladakh',kaza:'Spiti Valley',kutch:'Great Rann of Kutch',aurangabad:'Ellora Caves',portblair:'Cellular Jail Port Blair',agra:'Taj Mahal',amritsar:'Golden Temple Amritsar',ayodhya:'Ayodhya Ram Mandir',puri:'Jagannath Temple Puri',diu:'Diu Fort',mountabu:'Dilwara Temples Mount Abu',mysuru:'Mysore Palace',gangtok:'Gangtok Sikkim',srinagar:'Dal Lake Srinagar',kochi:'Fort Kochi',khajuraho:'Khajuraho Group of Monuments',ranthambore:'Ranthambore National Park',kaziranga:'Kaziranga National Park',shillong:'Shillong Meghalaya',pushkar:'Pushkar Lake',bikaner:'Junagarh Fort Bikaner',jodhpur:'Mehrangarh Fort',mahabaleshwar:'Mahabaleshwar',lonavala:'Lonavala',shimla:'Shimla Mall Road',kodaikanal:'Kodaikanal Lake',nainital:'Nainital Lake',mussoorie:'Mussoorie Uttarakhand'};
+const wq=d=>WQ[d.id]||(d.name+' '+d.state);
+function popular(){return`<section class="wrap pop" aria-labelledby="pophd"><p class="eyebrow">Pick a destination</p><h2 id="pophd">${D.length} places across India, ready to plan</h2><p class="muted" style="margin-top:8px">Tap one to fill in the search above.</p><div class="pgrid">${D.map(d=>`<button type="button" class="pcard" data-act="popdest" data-id="${d.id}"><span class="pw"><span class="pimg" data-q="${esc(wq(d))}" style="background-image:${art(d.hue,d.k)}"></span></span><span class="pbody"><b>${esc(d.name)}</b><small>${esc(d.state)}</small></span></button>`).join('')}</div></section>`}
+
+/* ---------- Google Maps (key lives in assets/config.js) ---------- */
+const GM={failed:false,loading:null};
+function loadGMaps(){
+  if(window.google&&google.maps&&google.maps.Map)return Promise.resolve(true);
+  const k=(window.SAFAR_CONFIG||{}).GOOGLE_MAPS_API_KEY;
+  if(!k||/^YOUR_/.test(k))return Promise.resolve(false);
+  if(GM.loading)return GM.loading;
+  return GM.loading=new Promise(res=>{
+    window.__gmReady=()=>res(true);
+    window.gm_authFailure=()=>{GM.failed=true;res(false);if(route==='itinerary')drawMap(window.__it)};
+    const sc=document.createElement('script');
+    sc.src='https://maps.googleapis.com/maps/api/js?key='+enc(k)+'&callback=__gmReady&v=weekly';
+    sc.async=true;sc.onerror=()=>{GM.failed=true;res(false)};document.head.appendChild(sc)})}
+async function drawMap(it){
+  const box=$('#gmap');if(!box||!it)return;const d=S.dest;
+  const ok=!GM.failed&&await loadGMaps();
+  if($('#gmap')!==box)return;
+  if(!ok){box.parentNode.innerHTML=mapSVG(it)+'<p class="small muted gfallback" style="margin-top:8px">The live Google Map is switched off. Add your Google Maps API key in <code>assets/config.js</code> to turn it on.</p>';return}
+  const hue=i=>[190,22,265,140,330,48][i%6];
+  const map=new google.maps.Map(box,{center:{lat:d.lat,lng:d.lng},zoom:12,mapTypeControl:false,streetViewControl:false,fullscreenControl:true});
+  const bd=new google.maps.LatLngBounds(),iw=new google.maps.InfoWindow(),info=$('#pininfo'),c0={lat:d.lat,lng:d.lng};
+  bd.extend(c0);
+  new google.maps.Marker({position:c0,map,title:d.name+' centre',zIndex:1,icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:'#0E2238',fillOpacity:1,strokeColor:'#ffffff',strokeWeight:3}});
+  it.days.forEach(dy=>{
+    const col='hsl('+hue(dy.i)+',60%,42%)',path=dy.ps.map(p=>({lat:p.lat,lng:p.lng}));
+    if(path.length>1)new google.maps.Polyline({map,path,geodesic:true,strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:col,scale:3},offset:'0',repeat:'14px'}]});
+    dy.ps.forEach((p,j)=>{
+      const pos={lat:p.lat,lng:p.lng};bd.extend(pos);
+      const m=new google.maps.Marker({position:pos,map,title:p.name,zIndex:10+j,label:{text:String(j+1),color:'#ffffff',fontWeight:'700',fontSize:'13px'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:col,fillOpacity:1,strokeColor:'#ffffff',strokeWeight:2.5}});
+      m.addListener('click',()=>{
+        iw.setContent('<div style="max-width:220px;color:#0E2238;font-family:sans-serif"><b>Day '+(dy.i+1)+' · '+esc(p.name)+'</b><p style="margin:4px 0">'+esc(p.desc)+'</p><a href="'+gm(p.name+' '+d.name)+'" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>');
+        iw.open({map,anchor:m});
+        if(info)info.innerHTML='<b>Day '+(dy.i+1)+' · '+esc(p.name)+'</b>. '+esc(p.desc)})})});
+  if(bd.getNorthEast().equals(bd.getSouthWest()))map.setZoom(13);else map.fitBounds(bd,48)}
+
+function pageHome(){
+  return`<section class="hero"><div class="wrap">
+  <svg class="arc" viewBox="0 0 520 200" aria-hidden="true"><path class="trail" d="M10 180Q260-60 510 120" fill="none" stroke="#F6F1E8" stroke-width="2"/><circle cx="10" cy="180" r="6" fill="#E4702B"/><circle cx="510" cy="120" r="6" fill="#3DB7C0"/><g><path d="M14 0 -12 -8 -8 0 -12 8z" fill="#E4702B" transform="scale(1.5)"/><animateMotion dur="7s" repeatCount="indefinite" rotate="auto" path="M10 180Q260-60 510 120"/></g></svg>
+  <p class="eyebrow">Plan a trip</p>
+  <h1>Plan a trip that fits the money you have</h1>
+  <p>Tell us where, how many of you and how much you can spend. We build the route, stay, food and a day-by-day plan on a real map, and say plainly when it does not fit.</p>
+  <div class="herochips"><span>Solo</span><span>Couples</span><span>Families</span><span>Friend groups</span><span>₹0 to ₹1,00,000</span></div></div></section>
+  <div class="wrap"><form id="f" class="card search" novalidate autocomplete="off">
+   <div class="g2">
+    <div class="field"><label for="dest">Destination</label><input class="inp" id="dest" type="text" placeholder="Try Jaipur, Hampi or Manali" value="${esc(S.destText)}" role="combobox" aria-expanded="false" aria-controls="dd-dest"><div class="dd" id="dd-dest" hidden></div><p class="err" id="e-dest"></p></div>
+    <div class="field"><label for="origin">Starting from</label><input class="inp" id="origin" type="text" placeholder="Your city, e.g. Delhi" value="${esc(S.originText)}" role="combobox" aria-expanded="false" aria-controls="dd-origin"><div class="dd" id="dd-origin" hidden></div><p class="err" id="e-origin"></p></div>
+   </div>
+   <div class="g4">
+    <div class="field"><label for="n">Travellers</label><div class="stp"><button type="button" data-act="inc" data-f="n" data-d="-1" aria-label="Fewer travellers">−</button><input id="n" type="number" min="1" step="1" inputmode="numeric" value="${S.n}"><button type="button" data-act="inc" data-f="n" data-d="1" aria-label="More travellers">+</button></div><p class="hint" id="h-n"></p><p class="err" id="e-n"></p></div>
+    <div class="field"><label for="days">Trip length (days)</label><div class="stp"><button type="button" data-act="inc" data-f="days" data-d="-1" aria-label="Fewer days">−</button><input id="days" type="number" min="1" step="1" inputmode="numeric" value="${S.days}"><button type="button" data-act="inc" data-f="days" data-d="1" aria-label="More days">+</button></div><p class="hint" id="h-days"></p><p class="err" id="e-days"></p></div>
+   </div>
+   <div class="field" id="kmrow" hidden><label for="km">Approximate road distance (km)</label><input class="inp" id="km" type="number" min="1" inputmode="numeric" value="${S.km||''}" placeholder="e.g. 450"><p class="hint">We do not have coordinates for one of these places. Enter the distance so travel costs can be estimated.</p><p class="err" id="e-km"></p></div>
+   <div class="budget"><div class="bhead"><div><span class="lab">Total travel budget</span><output class="bval" id="bval" for="budget">${inr(S.budget)}</output></div>
+    <label class="bin" for="bnum"><span aria-hidden="true">₹</span><input id="bnum" type="text" inputmode="numeric" value="${S.budget.toLocaleString('en-IN')}" aria-label="Budget in rupees"></label></div>
+    <input id="budget" type="range" min="0" max="${MAXB}" step="500" value="${S.budget}" aria-label="Total budget">
+    <div class="ticks"><span>₹0</span><span>₹25,000</span><span>₹50,000</span><span>₹75,000</span><span>₹1,00,000</span></div>
+    <p class="hint" id="h-b"></p><p class="err" id="e-b"></p></div>
+   <button class="go" type="submit"><span>SEARCH MY TRIP</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12 3 4l3 7 8 1-8 1-3 7z" fill="currentColor"/></svg></button>
+  </form></div>${popular()}`}
+
+function pageTransport(){
+  const o=opts(),km=dist();
+  return stepHead('How do you get there?',esc(S.origin.name)+' to '+esc(S.dest.name)+' · about '+km+' km by road · '+pl(S.n)+' · '+S.days+' day'+(S.days>1?'s':''))+indic+overBanner()+
+  '<div class="stack">'+(o.map(x=>{const on=S.tid===x.id;return`<article class="ticket ${on?'sel':''}"><div class="tmain"><div class="tt"><span class="mode">${x.mode}</span>${x.best?'<span class="best">BEST MATCH</span>':''}</div><h3>${x.cls}</h3>
+   <div class="route"><b>${esc(S.origin.name)}</b><span class="dash"></span><b>${esc(S.dest.name)}</b></div>
+   <dl class="kv"><div><dt>Journey, one way</dt><dd>About ${fmtH(x.hrs)}</dd></div><div><dt>Departure and arrival</dt><dd>Not shown. Check ${esc(x.link[0])}</dd></div><div><dt>Per person, return</dt><dd>${inr(x.pp)}</dd></div></dl>
+   <p class="muted small">${esc(x.note)}</p><p class="small"><a href="${x.link[1]}" target="_blank" rel="noopener">Open ${esc(x.link[0])} ↗</a></p></div>
+   <div class="stub"><span class="lbl">Return, ${pl(S.n)}</span><span class="price">${inr(x.total)}</span><span class="pill ${x.fc}">${x.ft}</span><p class="small muted">${Math.round(x.share*100)}% of your budget</p><button class="btn ${on?'teal':'ghost'}" data-act="tid" data-id="${x.id}" aria-pressed="${on}">${on?'Selected':'Choose this'}</button></div></article>`}).join('')||'<div class="empty"><p>No travel option fits this distance with our rate tables. Enter a closer destination or check the distance.</p></div>')+'</div></div>'}
+
+function placeCard(p){const on=S.places.has(p.id),d=S.dest,rec=S.rec&&S.rec.has(p.id),km=Math.round(hav(d.lat,d.lng,p.lat,p.lng)*1.3);
+  return`<article class="pc ${on?'on':''}"><div class="ph" data-q="${esc(p.name+' '+d.name)}" style="background-image:${p.image_urls?.[0]?'url('+JSON.stringify(p.image_urls[0])+')':art((CATH[p.cat]+d.hue)%360,CATK[p.cat])}"><span class="c">${CAT[p.cat]}</span>${rec?'<span class="r">RECOMMENDED</span>':''}</div>
+  <div class="bd"><h3>${esc(p.name)}</h3><p class="small muted">${esc(p.desc)}</p>
+  <div class="meta"><span>${p.fee?'~'+inr(p.fee)+(p.act?' activity':' entry'):'Free or nominal'}</span><span>~${fmtH(p.hrs)}</span><span>~${km} km from centre</span></div>
+  <div class="act"><a class="small" href="${gm(p.name+' '+d.name)}" target="_blank" rel="noopener">Google Maps ↗</a><button class="btn ${on?'teal':'ghost'} sm" data-act="place" data-id="${p.id}" aria-pressed="${on}">${on?'Added ✓':'Add'}</button></div></div></article>`}
+function pagePlaces(){
+  const d=S.dest;S.rec=new Set(d.places.length?recPlaces():[]);
+  const it=buildItin(),cats=['all'].concat(Object.keys(CAT).filter(c=>d.places.some(p=>p.cat===c)));
+  const list=d.places.filter(p=>S.pcat==='all'||p.cat===S.pcat);
+  const hrs=d.places.filter(p=>S.places.has(p.id)).reduce((a,p)=>a+p.hrs,0);
+  return stepHead('What do you want to see?','Recommendations weigh your budget, number of days, distance and cost. Pick what you like. Entry fees are indicative, and opening hours are not verified.')+overBanner()+
+  (d.places.length?`<div class="sum"><span><b>${S.places.size}</b> selected · about ${fmtH(hrs||0.5)} of sightseeing across ${S.days} day${S.days>1?'s':''}</span>${it.left.length?'<span class="pill bad">'+it.left.length+' will not fit. Add days or remove stops.</span>':'<span class="pill ok">Fits your days</span>'}<button class="btn ghost sm" data-act="resetplaces">Reset to recommended</button></div>
+  <div class="tabs" role="tablist">${cats.map(c=>`<button class="tab ${S.pcat===c?'on':''}" data-act="pcat" data-c="${c}" role="tab" aria-selected="${S.pcat===c}">${c==='all'?'All':CAT[c]}</button>`).join('')}</div>
+  <div class="grid">${list.map(placeCard).join('')}</div>`:
+  `<div class="empty"><h3>We have not curated places for ${esc(d.name)} yet</h3><p>Your travel, stay, food and local transport costs are still calculated. Look up sights on Google Maps and add your own plan on the day.</p><a class="btn teal" href="${gm('things to do in '+d.name)}" target="_blank" rel="noopener">Search things to do ↗</a></div>`)+'</div>'}
+
+function pageStay(){
+  const st=stays(),nn=nights(),T=opts().find(x=>x.id===S.tid),rec=recStay();
+  return stepHead('Where do you sleep?',nn+' night'+(nn>1?'s':'')+' for '+pl(S.n)+'. Typical stay area: '+esc(S.dest.areas)+'.')+indic+overBanner()+
+  '<div class="note"><span aria-hidden="true">ℹ️</span><span>Individual properties, photos and ratings are not shown because no live listings are connected. Use the search links to see real options at your price.</span></div><div class="stack">'+
+  st.map(t=>{const on=S.stayId===t.id,link=(t.id==='dorm'||t.id==='hostel')?['Hostelworld','https://www.hostelworld.com/']:['Booking.com','https://www.booking.com/searchresults.html?ss='+enc(S.dest.name)+'&group_adults='+S.n+'&no_rooms='+Math.ceil(S.n/2)];
+   const fc=t.total<=0.2*S.budget?'ok':t.total<=0.4*S.budget?'warn':'bad';
+   return`<article class="ticket ${on?'sel':''}"><div class="tmain"><div class="tt"><span class="mode">${t.unit==='bed'?'Per bed':'Per room'}</span>${rec.id===t.id?'<span class="best">RECOMMENDED</span>':''}</div><h3>${t.name}</h3><p class="muted small">${t.tip}</p>
+   <dl class="kv"><div><dt>Typical price</dt><dd>${inr(t.lo)}–${inr(t.hi)} per ${t.unit} per night</dd></div><div><dt>Likely amenities</dt><dd>${t.amen.join(', ')}</dd></div><div><dt>Your group, per night</dt><dd>${t.qty} ${t.unit}${t.qty>1?'s':''} · ${inr(t.night)}</dd></div></dl>
+   <p class="small"><a href="${link[1]}" target="_blank" rel="noopener">Search ${link[0]} ↗</a> · <a href="${gm(t.name.toLowerCase()+' in '+S.dest.name)}" target="_blank" rel="noopener">Google Maps ↗</a></p></div>
+   <div class="stub"><span class="lbl">${nn} night${nn>1?'s':''}</span><span class="price">${inr(t.total)}</span><span class="pill ${fc}">${Math.round(t.total/S.budget*100)}% of budget</span><button class="btn ${on?'teal':'ghost'}" data-act="stay" data-id="${t.id}" aria-pressed="${on}">${on?'Selected':'Choose this'}</button></div></article>`}).join('')+'</div></div>'}
+
+function pageFood(){
+  const d=S.dest,slots=[['b','Breakfast'],['l','Lunch'],['d','Dinner'],['s','Street food and snacks']];
+  return stepHead('What do you eat?','Local and affordable first. Costs are per person and indicative. Tourist-priced places are marked.')+overBanner()+
+  `<div class="sum"><span>Estimated food: <b>${inr(foodPD())}</b> per person per day</span><button class="btn ghost sm" data-act="reseteats">Reset to recommended</button></div>`+
+  slots.map(([s,t])=>{const l=d.eats.filter(e=>e.slot===s);return l.length?`<h3 class="slotH">${t}</h3><div class="grid">`+l.map(e=>{const on=S.eats.has(e.id);
+   return`<article class="pc ${on?'on':''}"><div class="ph" style="background-image:${e.image_urls?.[0]?'url('+JSON.stringify(e.image_urls[0])+')':art((d.hue+s.charCodeAt(0)*7)%360,'bowl')}"><span class="c">${esc(e.cuis)}</span>${e.tourist?'':'<span class="r">LOCAL</span>'}</div><div class="bd"><h3>${esc(e.name)}</h3><div class="meta"><span>~${inr(e.cost)} per person</span>${e.tourist?'<span>Tourist-priced</span>':''}</div>
+   <div class="act"><a class="small" href="${gm(e.where)}" target="_blank" rel="noopener">Google Maps ↗</a><button class="btn ${on?'teal':'ghost'} sm" data-act="eat" data-id="${e.id}" aria-pressed="${on}">${on?'Added ✓':'Add'}</button></div></div></article>`}).join('')+'</div>':''}).join('')+'</div>'}
+
+function pageLocal(){
+  const o=localOpts(),rec=recLocal();
+  return stepHead('How do you get around?','Costs for '+S.days+' day'+(S.days>1?'s':'')+' and '+pl(S.n)+'. Availability is not verified for any option.')+indic+overBanner()+
+  '<div class="stack">'+o.map(x=>{const on=S.localId===x.id;
+   return`<article class="ticket ${on?'sel':''}"><div class="tmain"><div class="tt"><span class="mode">Local</span>${rec===x.id?'<span class="best">RECOMMENDED</span>':''}</div><h3>${x.name}</h3><p class="muted small">${x.detail}</p>
+   <dl class="kv"><div><dt>Rate</dt><dd>${x.cost}</dd></div><div><dt>Deposit</dt><dd>${x.dep}</dd></div><div><dt>Fuel</dt><dd>${x.fuel}</dd></div><div><dt>Availability</dt><dd>${x.av}</dd></div></dl>
+   <p class="small">Contact details are not listed. <a href="${x.link[1]}" target="_blank" rel="noopener">${esc(x.link[0])} ↗</a></p></div>
+   <div class="stub"><span class="lbl">${S.days} day${S.days>1?'s':''}</span><span class="price">${x.total?inr(r10(x.total)):'Free'}</span><button class="btn ${on?'teal':'ghost'}" data-act="local" data-id="${x.id}" aria-pressed="${on}">${on?'Selected':'Choose this'}</button></div></article>`}).join('')+'</div></div>'}
+
+function mealLine(m,label,dayHint){return m?`<li><b>${esc(m.name)}</b> · ~${inr(m.cost)} per person <a class="small" href="${gm(m.where)}" target="_blank" rel="noopener">Map ↗</a></li>`:`<li class="muted">${label}: a local spot near ${esc(dayHint)}, budget about ${inr(({Breakfast:70,Lunch:150,Dinner:220}[label]||60)*S.dest.ci)} per person. <a class="small" href="${gm(label.toLowerCase()+' near '+dayHint+' '+S.dest.name)}" target="_blank" rel="noopener">Search ↗</a></li>`}
+function pageItin(){
+  const it=buildItin(),p=plan(),d=S.dest,T=p.T,nn=nights(),st=p.stay;window.__it=it;
+  const status=p.total<=S.budget?'<span class="pill ok">Within budget</span>':'<span class="pill bad">Over budget by '+inr(p.total-S.budget)+'</span>';
+  const cost=`<section class="card cost"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3>Cost breakdown</h3>${status}</div><p class="small muted">Indicative estimates. No live prices.</p>
+   <div>${p.lines.map(l=>`<div class="cr"><span>${l.k}</span><span class="v">${inr(l.v)}</span><span class="n">${esc(l.n)}</span><span class="bar1"><i style="width:${Math.min(100,p.total?l.v/p.total*100:0).toFixed(1)}%"></i></span></div>`).join('')}</div>
+   <dl class="tot"><div><dt>Total estimate</dt><dd>${inr(p.total)}</dd></div><div><dt>Per person</dt><dd>${inr(p.pp)}</dd></div><div><dt>Per day</dt><dd>${inr(p.perDay)}</dd></div><div><dt>${p.remaining>=0?'Remaining':'Shortfall'}</dt><dd style="color:var(--${p.remaining>=0?'ok':'bad'})">${inr(Math.abs(p.remaining))}</dd></div></dl></section>`;
+  const days=it.days.map(dy=>{
+    const first=dy.i===0,last=dy.i===S.days-1,hint=(dy.ps[0]&&dy.ps[0].name)||d.name,sl=dy.slots;
+    const place=(q,ix)=>q.map(x=>`<li><b>${esc(x.name)}</b> · ${fmtH(x.hrs)}, ${x.fee?'~'+inr(x.fee)+' pp':'free or nominal'} <a class="small" href="${gm(x.name+' '+d.name)}" target="_blank" rel="noopener">Map ↗</a></li>`).join('');
+    const hop=()=>{const a=dy.ps;if(a.length<2)return'';return'<p class="hop">Between stops: '+a.slice(1).map((x,i)=>'~'+tmin(a[i],x)+' min').join(', ')+' by road (estimate)</p>'};
+    const rt=dayRouteLink(dy);
+    const curated=(d.cmsItineraries||[]).filter(x=>Number(x.day_number||1)===dy.i+1).sort((a,b)=>String(a.start_time||'').localeCompare(String(b.start_time||'')));
+    return`<article class="day"><div class="dh"><h3>Day ${dy.i+1} · ${dy.title}</h3><span class="pill">Spend about ${inr(dy.cost)}</span></div>
+     ${curated.length?`<div class="dr"><span class="t">SAFAR PLAN</span><div><ul>${curated.map(x=>`<li><b>${esc(x.start_time||'')}${x.end_time?'–'+esc(x.end_time):''} ${esc(x.title||x.place_name||'Activity')}</b>${x.description?' · '+esc(x.description):''}${Number(x.estimated_cost)>0?' · ~'+inr(Number(x.estimated_cost))+' estimated':''}${x.notes?' <span class="muted">('+esc(x.notes)+')</span>':''}</li>`).join('')}</ul></div></div>`:''}
+     ${first?`<div class="dr"><span class="t">Getting there</span><div>${T.mode} · ${esc(T.cls||'')}, about ${fmtH(T.hrs||1)} from ${esc(S.origin.name)}.${nn>0&&st?' Then check in to your '+st.name.toLowerCase()+'.':''}</div></div>`:''}
+     <div class="dr"><span class="t">Morning</span><div><ul>${sl.m.length?place(sl.m):'<li class="muted">'+(first?'Travel and arrive':'Slow start, nearby walk')+'</li>'}</ul></div></div>
+     <div class="dr"><span class="t">Breakfast</span><div><ul>${mealLine(dy.b,'Breakfast',hint)}</ul></div></div>
+     <div class="dr"><span class="t">Lunch</span><div><ul>${mealLine(dy.l,'Lunch',hint)}</ul></div></div>
+     <div class="dr"><span class="t">Afternoon</span><div><ul>${sl.a.length?place(sl.a):'<li class="muted">Rest or explore nearby lanes</li>'}</ul>${hop()}</div></div>
+     <div class="dr"><span class="t">Evening</span><div><ul>${sl.e.length?place(sl.e):'<li class="muted">Free evening. Try a local market or promenade.</li>'}${dy.s?mealLine(dy.s,'Snack',hint):''}</ul></div></div>
+     <div class="dr"><span class="t">Dinner</span><div><ul>${mealLine(dy.d,'Dinner',hint)}</ul></div></div>
+     ${last?`<div class="dr"><span class="t">Return</span><div>Head home by ${T.mode.toLowerCase()} (${esc(T.cls||'')}), about ${fmtH(T.hrs||1)}. Leave buffer time for the journey.</div></div>`:''}
+     ${rt?`<div class="dr"><span class="t">Route</span><div><a href="${rt}" target="_blank" rel="noopener">Open Day ${dy.i+1} stops in Google Maps ↗</a></div></div>`:''}</article>`}).join('');
+  return stepHead('Your itinerary',esc(S.origin.name)+' to '+esc(d.name)+' · '+S.days+' days · '+pl(S.n))+
+  overBanner()+(it.left.length?`<div class="banner"><h3>${it.left.length} selected place${it.left.length>1?'s':''} did not fit</h3><p>${it.left.map(x=>esc(x.name)).join(', ')}. Add a day, or remove a stop on the Places step.</p></div>`:'')+
+  `<div class="two">${cost}<section class="card map"><div id="gmap" class="gmap" role="region" aria-label="Map of your itinerary"><p class="small muted" style="padding:16px">Loading map…</p></div><div class="legend">${it.days.filter(dy=>dy.ps.length).map(dy=>'<span><i style="background:hsl('+[190,22,265,140,330,48][dy.i%6]+' 60% 42%)"></i>Day '+(dy.i+1)+'</span>').join('')}</div><div id="pininfo" class="muted small" style="margin-top:8px">Tap a pin for details. The dark marker is the middle of ${esc(d.name)}. Pins use approximate coordinates, so check the exact spot before you travel.</div></section></div>
+  <div class="stack" style="margin-top:20px">${days}</div>
+  <section class="card cost" style="margin-top:20px"><h3>Travel tips</h3><ul class="tips">${d.tips.map(t=>'<li>'+esc(t)+'</li>').join('')}</ul></section>
+  <div class="card cost" style="margin-top:20px"><h3>Keep this trip in your account</h3><p class="muted">Save your selected destination, travel option, stay, food, local transport, itinerary and budget to My Trips. You can return to it later.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn teal" data-act="saveTrip" id="saveTripBtn">Save trip to My Trips</button><span id="saveTripMsg" class="small muted" role="status" aria-live="polite"></span></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn primary" data-act="go" data-to="booking">Approve and go to booking</button><button class="btn ghost" data-act="go" data-to="places">Change places</button></div></div>`}
+
+function makeTripSnapshot(){
+  const p=plan(),it=buildItin(),d=S.dest,T=p.T,st=p.stay,lo=p.loc;
+  const pick=(arr,id)=>arr.find(x=>x.id===id)||null;
+  const clean=x=>x?JSON.parse(JSON.stringify(x)):null;
+  return {
+    destination_id:d.dbid||null, destination_slug:d.id, destination_state:d.state||'',
+    origin:S.origin.name, destination:d.name, duration_days:S.days,
+    travellers:S.n, budget:S.budget, estimated_total:Math.round(p.total), per_person:Math.round(p.pp),
+    remaining:Math.round(p.remaining), generated_at:new Date().toISOString(),
+    travel:clean(T), stay:clean(st), local_transport:clean(lo),
+    selected_places:d.places.filter(x=>S.places.has(x.id)).map(clean),
+    selected_food:d.eats.filter(x=>S.eats.has(x.id)).map(clean),
+    days:it.days.map(dy=>({day:dy.i+1,title:dy.title,estimated_cost:Math.round(dy.cost),places:dy.ps.map(x=>({id:x.id,name:x.name,description:x.desc,entry_fee:x.fee,duration_hours:x.hrs,latitude:x.lat,longitude:x.lng})),morning:dy.slots.m.map(x=>x.name),afternoon:dy.slots.a.map(x=>x.name),evening:dy.slots.e.map(x=>x.name),breakfast:dy.b?{name:dy.b.name,price:dy.b.cost}:null,lunch:dy.l?{name:dy.l.name,price:dy.l.cost}:null,dinner:dy.d?{name:dy.d.name,price:dy.d.cost}:null,snack:dy.s?{name:dy.s.name,price:dy.s.cost}:null})),
+    cost_breakdown:p.lines.map(x=>({category:x.k,amount:Math.round(x.v),note:x.n})),
+    itinerary_text:itinText(),
+    indicative_prices:true
+  };
+}
+async function saveCurrentTrip(){
+  const btn=document.getElementById('saveTripBtn'),msg=document.getElementById('saveTripMsg');
+  if(btn){btn.disabled=true;btn.textContent='Saving…'} if(msg)msg.textContent='';
+  try{
+    const payload=makeTripSnapshot(),client=window.supabaseClient;
+    if(!client)throw new Error('Connection to Safar Planner is unavailable. Please refresh and try again.');
+    const {data:{session},error:sessionError}=await client.auth.getSession();
+    if(sessionError)throw sessionError;
+    if(!session){localStorage.setItem('safarplanner_pending_trip',JSON.stringify(payload));location.href='account.html?saveTrip=1';return;}
+    const {error:insertError}=await client.from('user_trips').insert({user_id:session.user.id,destination_name:payload.destination,travellers:payload.travellers,budget:payload.budget,estimated_cost:payload.estimated_total,status:'planned',itinerary:payload});
+    if(insertError)throw insertError;
+    if(msg)msg.textContent='Trip saved! You can find it in My Trips.';
+    if(btn){btn.textContent='Saved to My Trips ✓';btn.disabled=true;}
+  }catch(err){console.error('Save trip failed:',err);if(msg)msg.textContent=err.message||'Could not save this trip. Please try again.';if(btn){btn.disabled=false;btn.textContent='Save trip to My Trips';}}
+}
+
+function itinText(){
+  const it=buildItin(),p=plan(),d=S.dest,T=p.T;let t='TRIP: '+S.origin.name+' to '+d.name+' · '+S.days+' days · '+pl(S.n)+'\nBudget '+inr(S.budget)+' · estimated total '+inr(p.total)+' (per person '+inr(p.pp)+')\nAll prices are indicative estimates.\n\n';
+  t+='TRAVEL: '+T.mode+' ('+(T.cls||'')+'), return, about '+inr(T.total||0)+' for the group\n';
+  if(p.stay)t+='STAY: '+p.stay.name+', '+nights()+' night(s), about '+inr(p.stay.total)+'\n';
+  t+='LOCAL: '+(p.loc.name||'')+'\n\n';
+  it.days.forEach(dy=>{t+='DAY '+(dy.i+1)+' · '+dy.title+' (about '+inr(dy.cost)+')\n';
+    (d.cmsItineraries||[]).filter(x=>Number(x.day_number||1)===dy.i+1).forEach(x=>{t+='  SAFAR PLAN: '+(x.start_time||'')+' '+(x.title||x.place_name||'Activity')+' · '+(x.description||'')+(Number(x.estimated_cost)>0?' · '+inr(Number(x.estimated_cost)):'')+'\n'});
+    [['Morning',dy.slots.m],['Afternoon',dy.slots.a],['Evening',dy.slots.e]].forEach(([k,l])=>{if(l.length)t+='  '+k+': '+l.map(x=>x.name).join(', ')+'\n'});
+    if(dy.b)t+='  Breakfast: '+dy.b.name+'\n';if(dy.l)t+='  Lunch: '+dy.l.name+'\n';if(dy.d)t+='  Dinner: '+dy.d.name+'\n';t+='\n'});
+  return t+'COST BREAKDOWN\n'+p.lines.map(l=>'  '+l.k+': '+inr(l.v)).join('\n')+'\n  Total: '+inr(p.total)+'\n  Remaining: '+inr(p.remaining)}
+
+function pageBook(){
+  const p=plan(),d=S.dest,T=p.T,st=p.stay,lo=p.loc,sel=d.places.filter(x=>S.places.has(x.id)),eats=d.eats.filter(x=>S.eats.has(x.id));
+  const li=(a,b)=>`<li><span>${a}</span><span>${b}</span></li>`;
+  const stLink=st?((st.id==='dorm'||st.id==='hostel')?['Hostelworld','https://www.hostelworld.com/']:['Booking.com','https://www.booking.com/searchresults.html?ss='+enc(d.name)+'&group_adults='+S.n+'&no_rooms='+Math.ceil(S.n/2)]):null;
+  return stepHead('Booking assistance','Safar does not take payments or confirm reservations. Use these links to book each part with the provider.')+
+  (S.confirmed?`<div class="okbox" role="status"><b>Plan marked as ready.</b> Nothing has been booked or paid for. Use the links below to book each part.</div><br>`:'')+
+  `<div class="stack">
+  <section class="card bk"><h3>Travel</h3><ul>${li(esc(T.mode)+' · '+esc(T.cls||'')+', return for '+pl(S.n)+' (about '+inr(T.total||0)+')',T.link?`<a href="${T.link[1]}" target="_blank" rel="noopener">${esc(T.link[0])} ↗</a>`:'')}</ul></section>
+  <section class="card bk"><h3>Stay</h3><ul>${st?li(esc(st.name)+', '+nights()+' night(s), about '+inr(st.total),`<a href="${stLink[1]}" target="_blank" rel="noopener">${stLink[0]} ↗</a> · <a href="${gm(st.name.toLowerCase()+' in '+d.name)}" target="_blank" rel="noopener">Maps ↗</a>`):li('Day trip, no stay needed','')}</ul></section>
+  <section class="card bk"><h3>Getting around locally</h3><ul>${li(esc(lo.name||'')+(lo.dep?'. Deposit: '+esc(lo.dep):''),lo.link?`<a href="${lo.link[1]}" target="_blank" rel="noopener">${esc(lo.link[0])} ↗</a>`:'')}</ul><p class="small muted">Rental contact numbers are not listed. Call the shop to confirm stock before you go.</p></section>
+  <section class="card bk"><h3>Places and activities</h3><ul>${sel.map(x=>li(esc(x.name)+(x.fee?' · ~'+inr(x.fee)+' pp':''),`<a href="${gm(x.name+' '+d.name)}" target="_blank" rel="noopener">Map ↗</a>${x.act?' · <a href="https://www.getyourguide.com/s/?q='+enc(x.name+' '+d.name)+'" target="_blank" rel="noopener">Find tickets ↗</a>':''}`)).join('')||'<li class="muted">No places selected.</li>'}</ul></section>
+  <section class="card bk"><h3>Food</h3><ul>${eats.map(x=>li(esc(x.name),`<a href="${gm(x.where)}" target="_blank" rel="noopener">Map ↗</a>`)).join('')||'<li class="muted">No places selected.</li>'}</ul></section>
+  <section class="card bk"><h3>Important numbers (India)</h3><ul>${li('All emergencies','<b class="mono">112</b>')}${li('Railway enquiry','<b class="mono">139</b>')}${li('Tourist helpline','<b class="mono">1363</b>')}${li('Women helpline','<b class="mono">1091</b>')}</ul></section>
+  <section class="card bk"><h3>Your itinerary, as text</h3><p class="small muted">Copy it into a document and save as a PDF if you want a file to carry. A built-in PDF download needs the server-side export planned for the full app.</p>
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn teal" data-act="copy">Copy itinerary text</button><span id="copied" class="small muted" role="status"></span></div>
+   <details><summary>Show the text</summary><textarea class="tx" id="itx" readonly>${esc(itinText())}</textarea></details></section>
+  </div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn primary" data-act="confirm">${S.confirmed?'Plan marked ready ✓':'Mark my plan as ready'}</button><button class="btn ghost" data-act="go" data-to="itinerary">Back to itinerary</button><button class="btn ghost" data-act="newtrip">Plan another trip</button></div></div>`}
+
+/* ---------- rendering ---------- */
+const PAGES={home:pageHome,transport:pageTransport,places:pagePlaces,stay:pageStay,food:pageFood,local:pageLocal,itinerary:pageItin,booking:pageBook};
+function seq(){return ROUTES.filter(r=>!(r==='stay'&&nights()===0))}
+function renderSteps(){
+  $('#steps').innerHTML=seq().map(r=>{const done=S.visited.has(r)&&r!==route;return`<button class="st ${r===route?'on':''} ${done?'done':''}" ${done?`data-act="go" data-to="${r}"`:'disabled'} ${r===route?'aria-current="step"':''}><span class="dot"></span>${STEPN[r]}</button>`}).join('')}
+function renderBar(){
+  const b=$('#bar');
+  if(route==='home'||route==='booking'||!S.ready){b.hidden=true;document.body.classList.remove('hasbar');return}
+  const p=plan(),q=seq(),ix=q.indexOf(route),pct=Math.min(100,p.total/S.budget*100),over=p.total>S.budget;
+  b.hidden=false;document.body.classList.add('hasbar');
+  b.innerHTML=`<div class="wrap in"><dl class="nums" style="margin:0"><div><dt>Budget</dt><dd>${inr(S.budget)}</dd></div><div><dt>Estimated</dt><dd>${inr(p.total)}</dd></div><div><dt>${over?'Over by':'Remaining'}</dt><dd class="${over?'bad':'ok'}">${inr(Math.abs(p.remaining))}</dd></div><div><dt>Per person</dt><dd>${inr(p.pp)}</dd></div></dl>
+  <div class="nav"><button class="btn ghost" data-act="go" data-to="${q[Math.max(0,ix-1)]}">Back</button>${ix<q.length-1&&route!=='itinerary'?`<button class="btn primary" data-act="go" data-to="${q[ix+1]}">Next: ${STEPN[q[ix+1]]}</button>`:''}</div>
+  <div class="meter ${over?'over':''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}" aria-label="Share of budget used"><i style="width:${pct}%"></i></div></div>`}
+function render(keep){
+  const y=window.scrollY;
+  let r=(location.hash||'#home').slice(1);if(!ROUTES.includes(r))r='home';
+  if(r!=='home'&&!S.ready)r='home';
+  if(r==='stay'&&nights()===0)r='food';
+  route=r;S.visited.add(r);
+  if(r!=='home')ensure();
+  $('#app').innerHTML=PAGES[r]();
+  renderSteps();renderBar();
+  if(r==='home')bindHome();
+  if(r==='itinerary')drawMap(window.__it);
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)document.querySelectorAll('animateMotion').forEach(a=>a.remove());
+  if(keep)window.scrollTo(0,y)}
+function go(r){if(location.hash==='#'+r)render();else location.hash=r}
+window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0)});
+
+/* ---------- home form ---------- */
+function setBudget(v,from){v=Math.max(0,Math.min(MAXB,Math.round(v)||0));S.budget=v;
+  const r=$('#budget');if(r){r.value=v;r.style.setProperty('--p',(v/MAXB*100)+'%')}
+  const o=$('#bval');if(o)o.textContent=inr(v);
+  const nI=$('#bnum');if(nI&&from!=='num')nI.value=v.toLocaleString('en-IN');
+  hints()}
+function hints(){
+  const n=Math.max(1,parseInt($('#n').value)||1),dd=Math.max(1,parseInt($('#days').value)||1);
+  $('#h-n').textContent=n===1?'Solo traveller':n===2?'Couple or two friends':n<=5?'Family or small group':'Group travel';
+  $('#h-days').textContent=dd===1?'A day trip, no overnight stay':dd+' days, '+(dd-1)+' night'+(dd>2?'s':'');
+  $('#h-b').textContent='About '+inr(S.budget/(n*dd))+' per person per day, all included.'}
+function ddDest(){
+  const dd=$('#dd-dest'),raw=$('#dest').value,q=raw.trim().toLowerCase();let list,head='';
+  if(!q){head='<div class="chips">'+GRP.map(([k,l])=>`<button type="button" class="chip ${S.grp===k?'on':''}" data-act="grp" data-g="${k}">${l}</button>`).join('')+'</div>';list=D.filter(d=>d.tags.includes(S.grp))}
+  else list=D.filter(d=>(d.name+' '+d.state).toLowerCase().includes(q)||d.tags.some(t=>t.startsWith(q)));
+  const exact=D.some(d=>d.name.toLowerCase()===q);
+  dd.innerHTML=head+list.slice(0,8).map(d=>`<button type="button" class="opt" data-act="pickdest" data-id="${d.id}"><span class="th" data-q="${esc(wq(d))}" style="background-image:${art(d.hue,d.k)}"></span><span><b>${d.name}, ${d.state}</b><small>${d.blurb}${d.cur?'':' (basic estimates)'}</small></span></button>`).join('')+
+   (q&&!exact?`<button type="button" class="opt" data-act="pickcustom"><span class="th plain">+</span><span><b>Use “${esc(raw.trim())}”</b><small>Not in our list. You will enter the road distance, and estimates stay basic.</small></span></button>`:'');
+  dd.hidden=false;$('#dest').setAttribute('aria-expanded','true')}
+function ddOrigin(){
+  const dd=$('#dd-origin'),q=$('#origin').value.trim().toLowerCase();
+  const l=ORIGINS.filter(o=>!q||o[0].toLowerCase().includes(q)).slice(0,8);
+  dd.innerHTML=l.map(o=>`<button type="button" class="opt" data-act="pickorigin" data-n="${o[0]}"><span class="th plain">⌂</span><span><b>${o[0]}</b></span></button>`).join('')+(q&&!l.some(o=>o[0].toLowerCase()===q)?`<button type="button" class="opt" data-act="pickorigincustom"><span class="th plain">+</span><span><b>Use “${esc($('#origin').value.trim())}”</b><small>Not in our list. You will enter the road distance.</small></span></button>`:'');
+  dd.hidden=false;$('#origin').setAttribute('aria-expanded','true')}
+function closeDD(){document.querySelectorAll('.dd').forEach(x=>x.hidden=true)}
+function bindHome(){
+  $('#dest').addEventListener('input',ddDest);$('#dest').addEventListener('focus',ddDest);
+  $('#origin').addEventListener('input',ddOrigin);$('#origin').addEventListener('focus',ddOrigin);
+  ['dest','origin'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Escape')closeDD()}));
+  $('#n').addEventListener('input',hints);$('#days').addEventListener('input',hints);
+  $('#budget').addEventListener('input',e=>setBudget(+e.target.value));
+  $('#bnum').addEventListener('input',e=>{const v=parseInt(e.target.value.replace(/[^\d]/g,''))||0;setBudget(v,'num')});
+  $('#bnum').addEventListener('blur',()=>{$('#bnum').value=S.budget.toLocaleString('en-IN')});
+  $('#f').addEventListener('submit',e=>{e.preventDefault();try{submit()}catch(err){console.error('Safar Planner search failed:',err);showSubmitError('Something went wrong while building your trip. Please check your entries and try again.')}});
+  setBudget(S.budget);}
+function showSubmitError(message){let box=$('#e-submit');if(!box){box=document.createElement('p');box.id='e-submit';box.className='err';$('#f').appendChild(box)}box.textContent=message;box.scrollIntoView({block:'center',behavior:'smooth'});}
+function submit(){
+  const status=$('#e-submit');if(status)status.textContent='';
+  const err={},dt=$('#dest').value.trim(),ot=$('#origin').value.trim(),n=Number($('#n').value),dd=Number($('#days').value);
+  const kmv=$('#km')?Number($('#km').value):0;
+  const dest=D.find(d=>d.name.toLowerCase()===dt.toLowerCase())||(dt?{id:'x-'+dt.toLowerCase().replace(/\W+/g,'-'),name:dt.replace(/\b\w/g,c=>c.toUpperCase()),state:'',lat:null,lng:null,tags:[],blurb:'',hue:200,k:'compass',rail:'near',air:'near',leg:{c:350,h:3},ci:1,cur:false,places:[],eats:null,tips:GENTIPS.slice(),areas:'A central area near the main market or bus stand'}:null);
+  const org=findOrigin(ot)||(ot?{name:ot.replace(/\b\w/g,c=>c.toUpperCase()),lat:null,lng:null}:null);
+  if(dest&&dest.eats===null){const d=dest;d.eats=[E('b','Local breakfast (tiffin or paratha stall)','Regional',70,'breakfast in '+d.name),E('l','Local thali or meals','Regional',150,'thali in '+d.name),E('d','Family restaurant dinner','Regional',220,'family restaurant in '+d.name),E('s','Street food and tea','Street food',60,'street food in '+d.name)];d.eats.forEach((e,i)=>e.id=d.id+'-e'+i)}
+  if(!dt)err.dest='Enter a destination.';
+  if(!ot)err.origin='Enter your starting city.';
+  if(dt&&ot&&dest&&org&&dest.name.toLowerCase()===org.name.toLowerCase())err.dest='Your destination and starting point are the same.';
+  if(!Number.isInteger(n)||n<1)err.n='Enter a whole number of 1 or more.';
+  if(!Number.isInteger(dd)||dd<1||dd>365)err.days='Enter a whole number from 1 to 365.';
+  if(!(S.budget>0))err.b='Set a budget above ₹0.';
+  const need=(dest&&org)&&(dest.lat==null||org.lat==null);
+  $('#kmrow').hidden=!need;
+  if(need&&!(kmv>=1))err.km='Enter the approximate road distance in km.';
+  ['dest','origin','n','days','b','km'].forEach(k=>{const el=$('#e-'+k);if(el)el.textContent=err[k]||''});
+  if(Object.keys(err).length){const f=document.querySelector('.err:not(:empty)');if(f)f.scrollIntoView({block:'center',behavior:'smooth'});return}
+  Object.assign(S,{destText:dt,originText:ot,dest,origin:org,n,days:dd,km:need?kmv:null,ready:true,tidAuto:true,stayAuto:true,localAuto:true,placesInit:false,eatsInit:false,pcat:'all',confirmed:false,tid:null});
+  S.visited=new Set(['home']);S.places=new Set();S.eats=new Set();
+  closeDD();
+  const fl=$('#fly');
+  if(fl){
+    $('#flyroute').textContent=org.name+' → '+dest.name;
+    fl.hidden=false;
+    const plane=fl.querySelector('.plane');
+    if(plane){plane.style.animation='none';void plane.offsetWidth;plane.style.animation='';}
+  }
+  const calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Keep the original flying-plane transition before opening the transport results.
+  setTimeout(()=>{
+    if(fl)fl.hidden=true;
+    go('transport');
+    window.scrollTo(0,0);
+  },calm?700:2100);
+}
+
+/* ---------- actions ---------- */
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.field'))closeDD();
+  const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  switch(a){
+   case'home':e.preventDefault();go('home');break;
+   case'go':go(b.dataset.to);window.scrollTo(0,0);break;
+   case'inc':{const i=$('#'+b.dataset.f),v=Math.max(1,(parseInt(i.value)||1)+Number(b.dataset.d));i.value=v;hints();break}
+   case'grp':S.grp=b.dataset.g;ddDest();break;
+   case'popdest':{const d=D.find(x=>x.id===b.dataset.id);$('#dest').value=d.name;window.scrollTo({top:0,behavior:'smooth'});closeDD();$('#dest').focus({preventScroll:true});closeDD();break}
+   case'pickdest':{const d=D.find(x=>x.id===b.dataset.id);$('#dest').value=d.name;closeDD();break}
+   case'pickcustom':closeDD();break;
+   case'pickorigin':$('#origin').value=b.dataset.n;closeDD();break;
+   case'pickorigincustom':closeDD();break;
+   case'tid':S.tid=b.dataset.id;S.tidAuto=false;render(true);break;
+   case'place':{const id=b.dataset.id;S.places.has(id)?S.places.delete(id):S.places.add(id);render(true);break}
+   case'pcat':S.pcat=b.dataset.c;render(true);break;
+   case'resetplaces':S.places=new Set(recPlaces());render(true);break;
+   case'stay':S.stayId=b.dataset.id;S.stayAuto=false;render(true);break;
+   case'eat':{const id=b.dataset.id;S.eats.has(id)?S.eats.delete(id):S.eats.add(id);render(true);break}
+   case'reseteats':S.eats=new Set(recEats());render(true);break;
+   case'local':S.localId=b.dataset.id;S.localAuto=false;render(true);break;
+   case'cheap':{const ol=opts().slice().sort((x,y)=>x.total-y.total),st=stays().slice().sort((x,y)=>x.total-y.total);
+     if(ol[0]){S.tid=ol[0].id;S.tidAuto=false}if(nights()>0){S.stayId=st[0].id;S.stayAuto=false}S.localId='walk';S.localAuto=false;render(true);break}
+   case'pin':{const it=buildItin(),p=S.dest.places.find(x=>x.id===b.dataset.id),el=$('#pininfo');
+     if(p&&el)el.innerHTML='<b>Day '+(Number(b.dataset.day)+1)+' · '+esc(p.name)+'</b>. '+esc(p.desc)+' <a href="'+gm(p.name+' '+S.dest.name)+'" target="_blank" rel="noopener">Open in Google Maps ↗</a>';break}
+   case'copy':{const t=$('#itx').value,m=$('#copied');
+     const fb=()=>{const x=$('#itx');x.closest('details').open=true;x.focus();x.select();m.textContent='Text selected. Press Ctrl/Cmd+C to copy.'};
+     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>{m.textContent='Copied.'}).catch(fb);else fb();break}
+   case'confirm':S.confirmed=true;render(true);break;
+   case'saveTrip':saveCurrentTrip();break;
+   case'newtrip':S.ready=false;S.visited=new Set(['home']);go('home');break}
+});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('pin')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+
+async function loadPublishedDestinations(){
+ const client=window.supabaseClient;if(!client)return;
+ const {data,error}=await client.from('destinations').select('id,name,slug,state,description,image_url,tags,latitude,longitude,is_published').eq('is_published',true);
+ if(error){console.warn('Could not load published destinations:',error.message);return;}
+ for(const row of (data||[])){
+  const id=(row.slug||row.name||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');if(!id)continue;
+  let d=D.find(x=>x.id===id||x.name.toLowerCase()===String(row.name||'').toLowerCase());
+  if(!d){let tags=Array.isArray(row.tags)?row.tags:[];tags=tags.map(x=>String(x).toLowerCase()).filter(x=>GRP.some(g=>g[0]===x));if(!tags.length)tags=['visited'];d={id,name:row.name,state:row.state||'',lat:Number(row.latitude)||0,lng:Number(row.longitude)||0,tags,blurb:row.description||'A destination selected by Safar Planner.',hue:165,k:'compass',rail:'near',air:'near',leg:{c:350,h:3},ci:1,cur:false,areas:'A central area near the main market or bus stand',tips:GENTIPS.slice(),places:[],eats:[]};D.push(d)}
+  Object.assign(d,{dbid:row.id,image_url:row.image_url||d.image_url,blurb:row.description||d.blurb,state:row.state||d.state});
+  const names=['destination_places','destination_food','destination_stays','destination_transport','destination_itineraries','destination_travel_options'];
+  const res=await Promise.all(names.map(t=>client.from(t).select('*').eq('destination_id',row.id).eq('is_published',true).order('sort_order')));
+  const c={};names.forEach((t,i)=>{if(res[i].error){console.warn('Could not load '+t,res[i].error.message);c[t]=[]}else c[t]=res[i].data||[]});
+  const cats={viewpoint:'V',nature:'N',culture:'C',history:'C',food:'F',shopping:'S',activity:'L',temple:'C',waterfall:'N',fort:'C'};
+  d.places=c.destination_places.map(x=>({id:'cms-p-'+x.id,cat:cats[String(x.category||'').toLowerCase()]||'H',name:x.name,desc:x.description||'',fee:Number(x.entry_fee)||0,hrs:Math.max(.25,parseFloat(x.visit_duration)||1),lat:Number(x.latitude)||d.lat,lng:Number(x.longitude)||d.lng,slot:'m',address:x.address,map_url:x.map_url,tips:x.tips,image_urls:x.image_urls||[]}));
+  const slots={breakfast:'b',brunch:'b',lunch:'l',dinner:'d',snacks:'s','street food':'s',tea:'s'};
+  d.eats=c.destination_food.map(x=>({id:'cms-e-'+x.id,slot:slots[String(x.meal_type||'').toLowerCase()]||'l',name:x.name,cuis:x.cuisine||'Local',cost:Number(x.price_min)||Number(x.price_max)||0,where:x.map_url||x.address||x.name+' '+d.name,tourist:false,description:x.description,must_try:x.must_try,image_urls:x.image_urls||[]}));
+  d.cmsStays=c.destination_stays;d.cmsTransport=c.destination_transport;d.cmsItineraries=c.destination_itineraries;d.cmsTravel=c.destination_travel_options;
+  const tips=c.destination_places.map(x=>x.tips).filter(Boolean);if(tips.length)d.tips=tips;
+ }
+}
+(async()=>{
+  try{await loadPublishedDestinations();}catch(e){console.warn('Destination sync failed:',e);}
+  try{const q=new URLSearchParams(location.search).get('dest');const d0=q&&D.find(x=>x.id===q);if(d0)S.destText=d0.name}catch(e){}
+  render();
+})();
+</script>
+
+</body></html>

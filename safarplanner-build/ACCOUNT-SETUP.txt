@@ -1,0 +1,19 @@
+SAFAR PLANNER CUSTOMER ACCOUNTS
+
+1. Keep your existing Supabase project and current tables.
+2. In Supabase Dashboard > SQL Editor, create a new query.
+3. Copy and run the complete USER-ACCOUNTS-MIGRATION.sql file once.
+4. In Supabase Dashboard > Authentication > URL Configuration, add your deployed website URL to Site URL / Redirect URLs when you deploy. For local testing, use the local Live Server URL as an allowed redirect if email confirmation redirects are used.
+5. Run index-standalone.html or plan-connected.html with VS Code Live Server. Use the new My account link, or open account.html directly.
+6. Customers can sign up with email/password. If email confirmation is enabled in Supabase, they must confirm the email before signing in.
+7. Admins sign into admin.html as usual and open the new Customers tab to view profiles, suspend/reactivate accounts, adjust recorded savings and award/reverse reward points.
+
+SECURITY
+- Browser uses only the existing Supabase publishable/anon key in assets/config.js.
+- Never add a Supabase service-role key to HTML or JavaScript.
+- RLS keeps customer profiles, trips, rewards and bookings private to their owner; admins can manage them through public.is_admin().
+
+CURRENT SCOPE / IMPORTANT
+- This update adds customer registration, login, profile editing, account dashboard, rewards ledger, savings display, customer management in admin, and user_trips storage.
+- My Trips / Past Trips will show trip records once a trip is saved to public.user_trips. This package does not yet automatically save the trip planner's generated itinerary or convert a booking enquiry into a user_trips record. That is the next integration step.
+- Existing bookings are retained; their user_id is nullable so old guest enquiries remain intact.

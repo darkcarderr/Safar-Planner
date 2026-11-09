@@ -1,0 +1,25 @@
+SAFAR PLANNER — SAVE TO MY TRIPS UPDATE
+
+WHAT CHANGED
+- Added “Save trip to My Trips” to the generated itinerary page.
+- Saves the customer's selected origin/destination, trip duration, group size, budget, estimated total, selected travel/stay/local transport, chosen places and food, day-by-day schedule, cost breakdown and copyable itinerary text.
+- Signed-in customers save directly to Supabase public.user_trips.
+- Guests are sent to account.html; the pending trip is held in this browser and saved after they register/sign in. If email confirmation is enabled, the pending trip remains in this browser until they sign in after confirming.
+- My Trips displays trip summary and an expandable saved itinerary.
+- Past Trips continues to show trips whose status is set to completed by the admin workflow.
+
+INSTALL
+1. Extract this ZIP into a new folder; keep your previous folder as backup.
+2. Open the extracted folder in VS Code.
+3. Run admin.html or plan-connected.html with Live Server (http://127.0.0.1:5500/...). Do not use file://.
+4. Sign in to a customer account at account.html.
+5. Generate a trip, open the Itinerary step, and click “Save trip to My Trips”.
+6. Open My account and confirm the trip appears.
+
+DATABASE
+This update uses the existing user_trips table created by USER-ACCOUNTS-MIGRATION.sql. No new SQL migration is required if that migration has already been run successfully. The user_trips RLS policies must allow authenticated users to insert/select only their own rows. Never add the Supabase service-role key to browser files.
+
+NOTES
+- Dates are not currently collected by the planner, so saved trips show “Dates not set”.
+- Saving a trip does not book or pay for transport, hotels or activities. Prices remain indicative estimates.
+- Past-trip status is not automatically inferred from dates because the planner does not yet collect travel dates. It should be changed to completed through a later admin workflow.

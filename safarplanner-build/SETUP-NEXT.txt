@@ -1,0 +1,55 @@
+SAFAR PLANNER — DESTINATION CMS UPDATE
+
+1. Extract this ZIP and keep the complete folder structure together.
+2. Open the folder in VS Code and run admin.html with Live Server.
+3. IMPORTANT: Before using the new content manager, open Supabase Dashboard > SQL Editor.
+4. Open SUPABASE-CMS-MIGRATION.sql from this folder, copy its full contents, paste into SQL Editor, and Run it once.
+   This adds destination content tables and the public destination-media Storage bucket.
+   It does not delete or replace your existing destinations, trips, profiles or bookings.
+5. In VS Code Live Server, open admin.html and sign in with your existing admin account.
+6. Open a destination and click Manage content. You can manage:
+   - Places to visit
+   - Food & restaurants
+   - Stay & accommodation
+   - Getting around
+   - Day-wise itinerary
+   - Travel to destination
+7. Add/edit/delete items, publish or save as draft, and upload multiple photos.
+8. Destination cover images can also be uploaded in the destination form.
+
+IMAGE UPLOADS
+Images are stored in Supabase Storage bucket: destination-media.
+The SQL migration creates the bucket and policies. Only admin/staff users can upload/update/delete.
+The bucket is public-read so customer pages can display published image URLs.
+Never put a Supabase service-role key in browser files.
+
+IMPORTANT LIMITATION
+This update adds the complete Admin CMS and database structure. The existing customer planner screens are not yet fully wired to render every new Places/Food/Stay/Transport/Itinerary record. That is the next integration step. Existing layout and planner flow are retained.
+Live bus/flight/train fares are not enabled by this CMS migration. Those require separate provider API agreements and secure server-side integrations.
+
+CUSTOMER CONTENT SYNC UPDATE
+The Plan a Trip page now reads published content from these Supabase tables for each published destination:
+- destination_places -> Places step
+- destination_stays -> Stay step
+- destination_food -> Food step
+- destination_transport -> Getting around step
+- destination_itineraries -> curated activities in Itinerary step
+- destination_travel_options -> Travel step
+Only rows with is_published=true appear to customers. After changing content, refresh the customer Plan a Trip page. Use the same Supabase project and keep assets/config.js unchanged.
+If content is still missing, verify that SUPABASE-CMS-MIGRATION.sql was run successfully and that the content rows have the correct destination_id and Published checked. Open browser DevTools (F12) -> Console to inspect any Supabase read errors.
+
+DYNAMIC ITINERARY UPDATE
+- Published destination places, food, stays, local transport, travel options and curated itinerary rows are loaded from the Supabase destination content tables.
+- Curated itinerary rows now appear inside their matching day card in the customer itinerary and in the copied itinerary text.
+- Automatic day planning still schedules selected published attractions and selected food recommendations; admin-curated schedule rows are shown alongside those generated recommendations.
+- Prices remain admin-entered estimates unless a live provider API is connected. Confirm all rates and availability with providers.
+- Keep your existing Supabase project and data. No new SQL migration is required for this code-only change.
+
+
+BLOG CMS SETUP
+1. Open Supabase SQL Editor.
+2. Run BLOG-CMS-MIGRATION.sql once.
+3. Open admin.html, sign in, and choose Blog posts.
+4. Create posts as drafts or publish them. Set one as featured if desired.
+5. Public posts appear automatically at blog/index.html. Each opens blog/blog-post.html.
+Blog article content is plain text; separate paragraphs with a blank line. Cover images can be hosted URLs.
